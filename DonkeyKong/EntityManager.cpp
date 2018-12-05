@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "EntityManager.h"
+#include "Player.h"
 
 std::vector<std::shared_ptr<Entity>> EntityManager::m_Entities;
 
@@ -21,7 +22,8 @@ std::shared_ptr<Entity> EntityManager::GetPlayer()
 			continue;
 		}
 
-		if (entity->m_type == EntityType::player)
+		//if (entity->m_type == EntityType::player)
+		if(Player* p = dynamic_cast<Player*>(entity.get))
 		{
 			return entity;
 		}
