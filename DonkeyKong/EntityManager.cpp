@@ -1,8 +1,12 @@
 #include "pch.h"
 #include "EntityManager.h"
 #include "Player.h"
+#include "Block.h"
+#include "Ladder.h"
 
-std::vector<std::shared_ptr<Entity>> EntityManager::m_Entities;
+std::shared_ptr<Player> EntityManager::m_Player;
+std::vector<std::shared_ptr<Block>> EntityManager::m_Blocks;
+std::vector<std::shared_ptr<Ladder>> EntityManager::m_Ladders;
 
 EntityManager::EntityManager()
 {
@@ -11,23 +15,4 @@ EntityManager::EntityManager()
 
 EntityManager::~EntityManager()
 {
-}
-
-std::shared_ptr<Entity> EntityManager::GetPlayer()
-{
-	for (std::shared_ptr<Entity> entity : EntityManager::m_Entities)
-	{
-		if (entity->m_enabled == false)
-		{
-			continue;
-		}
-
-		//if (entity->m_type == EntityType::player)
-		if(Player* p = dynamic_cast<Player*>(entity.get))
-		{
-			return entity;
-		}
-	}
-
-	return nullptr;
 }
