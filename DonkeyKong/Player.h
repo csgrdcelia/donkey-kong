@@ -7,5 +7,16 @@ class Player : public Entity
 public:
 	Player();
 	~Player();
+
+public:
+	bool IsUnderLadder();
+	bool IsAboveLadder();
+private:
+	bool CollidesBlock();
+
+public:
+	static const float	PlayerSpeed;
+	
+
 };
 

@@ -75,7 +75,6 @@ Game::Game()
 
 	std::shared_ptr<Player> player = std::make_shared<Player>();
 	player->m_sprite = mPlayer;
-	//player->m_type = EntityType::player;
 	player->m_size = mTexture.getSize();
 	player->m_position = mPlayer.getPosition();
 	EntityManager::m_Player = player;
@@ -132,33 +131,34 @@ void Game::processEvents()
 	}
 }
 
+void Game::handlePlayerInput(sf::Keyboard::Key key, bool isPressed)
+{
+	if (key == sf::Keyboard::Up)
+		mIsMovingUp = isPressed;
+	else if (key == sf::Keyboard::Down)
+		mIsMovingDown = isPressed;
+	else if (key == sf::Keyboard::Left)
+		mIsMovingLeft = isPressed;
+	else if (key == sf::Keyboard::Right)
+		mIsMovingRight = isPressed;
+
+	if (key == sf::Keyboard::Space)
+	{
+	}
+}
+
 void Game::update(sf::Time elapsedTime)
 {
 	sf::Vector2f movement(0.f, 0.f);
-	if (mIsMovingUp)
+	if (mIsMovingUp && EntityManager::m_Player->IsUnderLadder())
 		movement.y -= PlayerSpeed;
-	if (mIsMovingDown)
+	if (mIsMovingDown && EntityManager::m_Player->IsAboveLadder())
 		movement.y += PlayerSpeed;
 	if (mIsMovingLeft)
 		movement.x -= PlayerSpeed;
 	if (mIsMovingRight)
 		movement.x += PlayerSpeed;
 
-	//for (std::shared_ptr<Entity> entity : EntityManager::m_Entities)
-	//{
-	//	if (entity->m_enabled == false)
-	//	{
-	//		continue;
-	//	}
-
-	//	//if (entity->m_type != EntityType::player)
-	//	if (Player* p = dynamic_cast<Player*>(entity.get))
-	//	{
-	//		continue;
-	//	}
-
-	//	entity->m_sprite.move(movement * elapsedTime.asSeconds());
-	//}
 	EntityManager::m_Player->m_sprite.move(movement * elapsedTime.asSeconds());
 }
 
@@ -205,28 +205,11 @@ void Game::updateStatistics(sf::Time elapsedTime)
 		mStatisticsNumFrames = 0;
 	}
 
-	//
-	// Handle collision
-	//
 
 	if (mStatisticsUpdateTime >= sf::seconds(0.050f))
 	{
-		// Handle collision weapon enemies
+		
 	}
 }
 
-void Game::handlePlayerInput(sf::Keyboard::Key key, bool isPressed)
-{
-	if (key == sf::Keyboard::Up)
-		mIsMovingUp = isPressed;
-	else if (key == sf::Keyboard::Down)
-		mIsMovingDown = isPressed;
-	else if (key == sf::Keyboard::Left)
-		mIsMovingLeft = isPressed;
-	else if (key == sf::Keyboard::Right)
-		mIsMovingRight = isPressed;
 
-	if (key == sf::Keyboard::Space)
-	{
-	}
-}
