@@ -8,7 +8,7 @@
 #include "Block.h"
 
 
-const float Game::PlayerSpeed = 100.f;
+const float Game::PlayerSpeed = 150.f;
 const sf::Time Game::TimePerFrame = sf::seconds(1.f / 60.f);
 
 Game::Game()
@@ -105,6 +105,15 @@ Game::Game()
 	mStatisticsText.setFont(mFont);
 	mStatisticsText.setPosition(5.f, 5.f);
 	mStatisticsText.setCharacterSize(10);
+
+	// Draw win text
+	mWinText.setString("YOU WIN !");
+	mWinText.setFont(mFont);
+	mWinText.setPosition(315.f, 20.f);
+	mWinText.setCharacterSize(50);
+	mWinText.setStyle(sf::Text::Bold);
+	mWinText.setFillColor(sf::Color::Red);
+	
 }
 
 void Game::run()
@@ -218,6 +227,12 @@ void Game::render()
 	mWindow.draw(EntityManager::m_Player->m_sprite);
 
 	mWindow.draw(mStatisticsText);
+
+	if (IsFinished())
+	{
+	mWindow.draw(mWinText);
+	}
+
 	mWindow.display();
 }
 
@@ -243,6 +258,15 @@ void Game::updateStatistics(sf::Time elapsedTime)
 	{
 		
 	}
+}
+
+bool Game::IsFinished()
+{
+	if (EntityManager::GetCoinsEaten() == EntityManager::m_Coins.size())
+	{
+		return true;
+	}
+	return false;
 }
 
 

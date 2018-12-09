@@ -21,6 +21,7 @@ private:
 
 	void updateStatistics(sf::Time elapsedTime);
 	void handlePlayerInput(sf::Keyboard::Key key, bool isPressed);
+	bool IsFinished();
 
 private:
 	static const float		PlayerSpeed;
@@ -32,6 +33,7 @@ private:
 	sf::Font	mFont;
 	sf::Text	mStatisticsText;
 	sf::Time	mStatisticsUpdateTime;
+	sf::Text	mWinText;
 
 	std::size_t	mStatisticsNumFrames;
 	bool mIsMovingUp;
