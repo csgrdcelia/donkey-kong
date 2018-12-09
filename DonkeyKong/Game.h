@@ -34,6 +34,8 @@ private:
 	sf::Text	mStatisticsText;
 	sf::Time	mStatisticsUpdateTime;
 	sf::Text	mWinText;
+	sf::Sprite	mPeach;
+	sf::Texture mPeachTexture;
 
 	std::size_t	mStatisticsNumFrames;
 	bool mIsMovingUp;

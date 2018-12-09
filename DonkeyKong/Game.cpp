@@ -81,6 +81,11 @@ Game::Game()
 		}
 	}
 
+	// Draw Peach
+	mPeachTexture.loadFromFile("Media/Textures/peach.png");
+	mPeach.setTexture(mPeachTexture);
+	mPeach.setPosition(500.f, 40.f);
+
 	// Draw Mario
 
 	mTexture.loadFromFile("Media/Textures/Mario_small_transparent.png"); // Mario_small.png");
@@ -225,6 +230,7 @@ void Game::render()
 	}
 
 	mWindow.draw(EntityManager::m_Player->m_sprite);
+	mWindow.draw(Game::mPeach);
 
 	mWindow.draw(mStatisticsText);
 
