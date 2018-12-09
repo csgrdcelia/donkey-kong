@@ -13,6 +13,9 @@ public:
 	~EntityManager();
 
 public:
+	static int GetCoinsEaten();
+
+public:
 	static std::shared_ptr<Player> m_Player;
 	static std::vector<std::shared_ptr<Block>> m_Blocks;
 	static std::vector<std::shared_ptr<Ladder>> m_Ladders;

@@ -9,6 +9,7 @@ public:
 	~Player();
 
 public:
+	void TryToEatCoin();
 	bool IsUnderLadder();
 	bool IsAboveLadder();
 private:

@@ -17,3 +17,16 @@ EntityManager::EntityManager()
 EntityManager::~EntityManager()
 {
 }
+
+int EntityManager::GetCoinsEaten()
+{
+	int coins = 0;
+	for (std::shared_ptr<Entity> entity : EntityManager::m_Coins)
+	{
+		if (!entity->m_enabled)
+		{
+			coins += 1;
+		}
+	}
+	return coins;
+}

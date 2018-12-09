@@ -2,7 +2,6 @@
 #include "Player.h"
 #include "EntityManager.h"
 
-const float Player::PlayerSpeed = 100.f;
 
 Player::Player()
 {
@@ -11,6 +10,19 @@ Player::Player()
 
 Player::~Player()
 {
+}
+
+void Player::TryToEatCoin()
+{
+	for (std::shared_ptr<Entity> entity : EntityManager::m_Coins)
+	{
+		sf::FloatRect fr = entity->m_sprite.getGlobalBounds();
+		if (this->m_sprite.getGlobalBounds().intersects(fr))
+		{
+			entity->m_enabled = false;
+			break;
+		}
+	}
 }
 
 bool Player::IsUnderLadder()

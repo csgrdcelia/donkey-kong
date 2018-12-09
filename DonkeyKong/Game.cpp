@@ -179,6 +179,9 @@ void Game::update(sf::Time elapsedTime)
 		movement.x += PlayerSpeed;
 
 	EntityManager::m_Player->m_sprite.move(movement * elapsedTime.asSeconds());
+
+	EntityManager::m_Player->TryToEatCoin();
+
 }
 
 void Game::render()
@@ -227,7 +230,9 @@ void Game::updateStatistics(sf::Time elapsedTime)
 	{
 		mStatisticsText.setString(
 			"Frames / Second = " + toString(mStatisticsNumFrames) + "\n" +
-			"Time / Update = " + toString(mStatisticsUpdateTime.asMicroseconds() / mStatisticsNumFrames) + "us");
+			"Time / Update = " + toString(mStatisticsUpdateTime.asMicroseconds() / mStatisticsNumFrames) + "us\n" +
+			toString(EntityManager::GetCoinsEaten()) + "/" + toString(EntityManager::m_Coins.size()) + " coins"
+		);
 
 		mStatisticsUpdateTime -= sf::seconds(1.0f);
 		mStatisticsNumFrames = 0;
