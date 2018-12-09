@@ -36,7 +36,7 @@ Game::Game()
 		for (int j = 0; j < BLOCK_COUNT_Y; j++)
 		{
 			_Block[i][j].setTexture(_TextureBlock);
-			_Block[i][j].setPosition(100.f + 70.f * (i + 1), 0.f + BLOCK_SPACE * (j + 1));
+			_Block[i][j].setPosition(100.f + 70.f * (i + 1), BLOCK_SPACE * (j + 1));
 
 			std::shared_ptr<Block> se = std::make_shared<Block>();
 			se->m_sprite = _Block[i][j];
@@ -53,13 +53,32 @@ Game::Game()
 	for (int i = 0; i < ECHELLE_COUNT; i++)
 	{
 		_Echelle[i].setTexture(_TextureEchelle);
-		_Echelle[i].setPosition(100.f + 70.f * (i + 1), 0.f + BLOCK_SPACE * (i + 1) + _sizeBlock.y);
+		_Echelle[i].setPosition(100.f + 70.f * (i + 1), BLOCK_SPACE * (i + 1) + _sizeBlock.y);
 
 		std::shared_ptr<Ladder> se = std::make_shared<Ladder>();
 		se->m_sprite = _Echelle[i];
 		se->m_size = _TextureEchelle.getSize();
 		se->m_position = _Echelle[i].getPosition();
 		EntityManager::m_Ladders.push_back(se);
+	}
+
+	// Draw coins
+
+	_textureCoin.loadFromFile("Media/Textures/coin.png");
+	for (int i = 0; i < COIN_COUNT; i++)
+	{
+		for (int j = 0; j < COIN_COUNT; j++)
+		{
+			_coin[i][j].setTexture(_textureCoin);
+			_coin[i][j].setPosition(100.f + 130.f * (j + 1), BLOCK_SPACE * (i + 1) + 50.f);
+
+			std::shared_ptr<Coin> se = std::make_shared<Coin>();
+			se->m_sprite = _coin[i][j];
+			se->m_size = _textureCoin.getSize();
+			se->m_position = _coin[i][j].getPosition();
+			if(!se->CollidesLadder())
+				EntityManager::m_Coins.push_back(se);
+		}
 	}
 
 	// Draw Mario
@@ -176,6 +195,15 @@ void Game::render()
 	}
 
 	for (std::shared_ptr<Entity> entity : EntityManager::m_Ladders)
+	{
+		if (entity->m_enabled == false)
+		{
+			continue;
+		}
+		mWindow.draw(entity->m_sprite);
+	}
+
+	for (std::shared_ptr<Entity> entity : EntityManager::m_Coins)
 	{
 		if (entity->m_enabled == false)
 		{

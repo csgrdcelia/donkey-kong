@@ -19,7 +19,7 @@ bool Player::IsUnderLadder()
 	{
 		sf::FloatRect fr = entity->m_sprite.getGlobalBounds();
 		fr.top -= 30; // so Mario can continue to hike when he's on the block
-		if (EntityManager::m_Player->m_sprite.getGlobalBounds().intersects(fr))
+		if (this->m_sprite.getGlobalBounds().intersects(fr))
 		{
 			return true;
 			break;
