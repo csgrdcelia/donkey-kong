@@ -84,7 +84,7 @@ Game::Game()
 	// Draw Peach
 	mPeachTexture.loadFromFile("Media/Textures/peach.png");
 	mPeach.setTexture(mPeachTexture);
-	mPeach.setPosition(500.f, 40.f);
+	mPeach.setPosition(600.f, 40.f);
 
 	// Draw Mario
 
@@ -114,7 +114,7 @@ Game::Game()
 	// Draw win text
 	mWinText.setString("YOU WIN !");
 	mWinText.setFont(mFont);
-	mWinText.setPosition(315.f, 20.f);
+	mWinText.setPosition(315.f, 10.f);
 	mWinText.setCharacterSize(50);
 	mWinText.setStyle(sf::Text::Bold);
 	mWinText.setFillColor(sf::Color::Red);
