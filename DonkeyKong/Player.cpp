@@ -45,7 +45,7 @@ bool Player::IsAboveLadder()
 	for (std::shared_ptr<Entity> entity : EntityManager::m_Ladders)
 	{
 		sf::FloatRect fr = entity->m_sprite.getGlobalBounds();
-		fr.top -= 32;
+		fr.top -= 50;
 		if (EntityManager::m_Player->m_sprite.getGlobalBounds().intersects(fr))
 		{
 			return true;
