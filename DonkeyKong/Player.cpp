@@ -30,7 +30,7 @@ bool Player::IsUnderLadder()
 	for (std::shared_ptr<Entity> entity : EntityManager::m_Ladders)
 	{
 		sf::FloatRect fr = entity->m_sprite.getGlobalBounds();
-		fr.top -= 30; // so Mario can continue to hike when he's on the block
+		fr.top -= 32; // so Mario can continue to hike when he's on the block
 		if (this->m_sprite.getGlobalBounds().intersects(fr))
 		{
 			return true;
@@ -45,7 +45,7 @@ bool Player::IsAboveLadder()
 	for (std::shared_ptr<Entity> entity : EntityManager::m_Ladders)
 	{
 		sf::FloatRect fr = entity->m_sprite.getGlobalBounds();
-		fr.top -= 50;
+		fr.top -= 40;
 		if (EntityManager::m_Player->m_sprite.getGlobalBounds().intersects(fr))
 		{
 			return true;

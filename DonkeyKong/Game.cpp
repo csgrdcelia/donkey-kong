@@ -84,11 +84,11 @@ Game::Game()
 	// Draw Peach
 	mPeachTexture.loadFromFile("Media/Textures/peach.png");
 	mPeach.setTexture(mPeachTexture);
-	mPeach.setPosition(600.f, 40.f);
+	mPeach.setPosition(600.f, 55.f);
 
 	// Draw Mario
 
-	mTexture.loadFromFile("Media/Textures/Mario_small_transparent.png"); // Mario_small.png");
+	mTexture.loadFromFile("Media/Textures/mario_right.png"); // Mario_small.png");
 	_sizeMario = mTexture.getSize();
 	mPlayer.setTexture(mTexture);
 	sf::Vector2f posMario;
