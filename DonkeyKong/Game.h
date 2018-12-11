@@ -6,6 +6,7 @@
 #define BLOCK_SPACE 110.f
 #define COIN_COUNT 4
 #define COIN_SPACE 120.f
+#define ENEMY_COUNT 4
 
 class Game
 {
@@ -25,6 +26,7 @@ private:
 
 private:
 	static const float		PlayerSpeed;
+	static const float		EnemySpeed;
 	static const sf::Time	TimePerFrame;
 
 	sf::RenderWindow		mWindow;
@@ -53,5 +55,7 @@ private:
 	sf::Vector2u _sizeMario;
 	sf::Texture _textureCoin;
 	sf::Sprite _coin[COIN_COUNT][COIN_COUNT];
+	sf::Texture _textureEnemy;
+	sf::Sprite _enemy[ENEMY_COUNT];
 };
 

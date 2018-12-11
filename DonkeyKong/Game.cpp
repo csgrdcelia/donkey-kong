@@ -9,6 +9,7 @@
 
 
 const float Game::PlayerSpeed = 150.f;
+const float Game::EnemySpeed = 50.f;
 const sf::Time Game::TimePerFrame = sf::seconds(1.f / 60.f);
 
 Game::Game()
@@ -79,6 +80,22 @@ Game::Game()
 			if(!se->CollidesLadder())
 				EntityManager::m_Coins.push_back(se);
 		}
+	}
+
+	// Draw enemies
+
+	_textureEnemy.loadFromFile("Media/Textures/enemy_1_right.png");
+
+	for (int i = 0; i < ECHELLE_COUNT; i++)
+	{
+		_enemy[i].setTexture(_textureEnemy);
+		_enemy[i].setPosition(100.f + 90.f * (i + 1), BLOCK_SPACE * (i + 1) + 78.f);
+
+		std::shared_ptr<Enemy> se = std::make_shared<Enemy>();
+		se->m_sprite = _enemy[i];
+		se->m_size = _textureEnemy.getSize();
+		se->m_position = _enemy[i].getPosition();
+		EntityManager::m_Enemies.push_back(se);
 	}
 
 	// Draw Peach
@@ -196,6 +213,16 @@ void Game::update(sf::Time elapsedTime)
 
 	EntityManager::m_Player->TryToEatCoin();
 
+	for (std::shared_ptr<Enemy> enemy : EntityManager::m_Enemies)
+	{
+		enemy->ChangeSideIfOnEdge();
+		sf::Vector2f movement(0.f, 0.f);
+		if (enemy->GoesToTheRight)
+			movement.x += EnemySpeed;
+		else
+			movement.x -= EnemySpeed;
+		enemy->m_sprite.move(movement * elapsedTime.asSeconds());
+	}
 }
 
 void Game::render()
@@ -204,29 +231,26 @@ void Game::render()
 
 	for (std::shared_ptr<Entity> entity : EntityManager::m_Blocks)
 	{
-		if (entity->m_enabled == false)
-		{
-			continue;
-		}
-		mWindow.draw(entity->m_sprite);
+		if (entity->m_enabled)
+			mWindow.draw(entity->m_sprite);
 	}
 
 	for (std::shared_ptr<Entity> entity : EntityManager::m_Ladders)
 	{
-		if (entity->m_enabled == false)
-		{
-			continue;
-		}
-		mWindow.draw(entity->m_sprite);
+		if (entity->m_enabled)
+			mWindow.draw(entity->m_sprite);
 	}
 
 	for (std::shared_ptr<Entity> entity : EntityManager::m_Coins)
 	{
-		if (entity->m_enabled == false)
-		{
-			continue;
-		}
-		mWindow.draw(entity->m_sprite);
+		if (entity->m_enabled)
+			mWindow.draw(entity->m_sprite);
+	}
+
+	for (std::shared_ptr<Entity> entity : EntityManager::m_Enemies)
+	{
+		if (entity->m_enabled)
+			mWindow.draw(entity->m_sprite);
 	}
 
 	mWindow.draw(EntityManager::m_Player->m_sprite);
@@ -235,9 +259,7 @@ void Game::render()
 	mWindow.draw(mStatisticsText);
 
 	if (IsFinished())
-	{
-	mWindow.draw(mWinText);
-	}
+		mWindow.draw(mWinText);	
 
 	mWindow.display();
 }

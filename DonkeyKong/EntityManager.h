@@ -4,6 +4,7 @@
 #include "Ladder.h"
 #include "Player.h"
 #include "Coin.h"
+#include "Enemy.h"
 
 
 class EntityManager
@@ -20,4 +21,5 @@ public:
 	static std::vector<std::shared_ptr<Block>> m_Blocks;
 	static std::vector<std::shared_ptr<Ladder>> m_Ladders;
 	static std::vector<std::shared_ptr<Coin>> m_Coins;
+	static std::vector<std::shared_ptr<Enemy>> m_Enemies;
 };
