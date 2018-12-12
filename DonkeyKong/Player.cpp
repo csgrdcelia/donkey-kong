@@ -25,6 +25,28 @@ void Player::TryToEatCoin()
 	}
 }
 
+bool Player::HasEatenAllCoins()
+{
+	if (EntityManager::GetCoinsEaten() == EntityManager::m_Coins.size())
+	{
+		return true;
+	}
+	return false;
+}
+
+bool Player::HasCollidedEnemy()
+{
+	for (std::shared_ptr<Entity> entity : EntityManager::m_Enemies)
+	{
+		sf::FloatRect fr = entity->m_sprite.getGlobalBounds();
+		if (this->m_sprite.getGlobalBounds().intersects(fr))
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
 bool Player::IsUnderLadder()
 {
 	for (std::shared_ptr<Entity> entity : EntityManager::m_Ladders)

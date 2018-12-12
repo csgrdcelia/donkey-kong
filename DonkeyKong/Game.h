@@ -22,12 +22,15 @@ private:
 
 	void updateStatistics(sf::Time elapsedTime);
 	void handlePlayerInput(sf::Keyboard::Key key, bool isPressed);
-	bool IsFinished();
+	void IsOver();
+	void IsWon();
 
 private:
 	static const float		PlayerSpeed;
 	static const float		EnemySpeed;
 	static const sf::Time	TimePerFrame;
+
+	bool IsFinished;
 
 	sf::RenderWindow		mWindow;
 	sf::Texture	mTexture;
@@ -35,7 +38,7 @@ private:
 	sf::Font	mFont;
 	sf::Text	mStatisticsText;
 	sf::Time	mStatisticsUpdateTime;
-	sf::Text	mWinText;
+	sf::Text	mEndGameText;
 	sf::Sprite	mPeach;
 	sf::Texture mPeachTexture;
 

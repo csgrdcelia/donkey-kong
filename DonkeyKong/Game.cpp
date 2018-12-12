@@ -129,12 +129,11 @@ Game::Game()
 	mStatisticsText.setCharacterSize(10);
 
 	// Draw win text
-	mWinText.setString("YOU WIN !");
-	mWinText.setFont(mFont);
-	mWinText.setPosition(315.f, 10.f);
-	mWinText.setCharacterSize(50);
-	mWinText.setStyle(sf::Text::Bold);
-	mWinText.setFillColor(sf::Color::Red);
+	mEndGameText.setFont(mFont);
+	mEndGameText.setPosition(315.f, 10.f);
+	mEndGameText.setCharacterSize(50);
+	mEndGameText.setStyle(sf::Text::Bold);
+	mEndGameText.setFillColor(sf::Color::Red);
 	
 }
 
@@ -256,10 +255,14 @@ void Game::render()
 	mWindow.draw(EntityManager::m_Player->m_sprite);
 	mWindow.draw(Game::mPeach);
 
+	
 	mWindow.draw(mStatisticsText);
+	mWindow.draw(mEndGameText);
 
-	if (IsFinished())
-		mWindow.draw(mWinText);	
+	if (EntityManager::m_Player->HasEatenAllCoins())
+		this->IsWon();
+	if (EntityManager::m_Player->HasCollidedEnemy())
+		this->IsOver();
 
 	mWindow.display();
 }
@@ -288,13 +291,19 @@ void Game::updateStatistics(sf::Time elapsedTime)
 	}
 }
 
-bool Game::IsFinished()
+void Game::IsWon()
 {
-	if (EntityManager::GetCoinsEaten() == EntityManager::m_Coins.size())
-	{
-		return true;
-	}
-	return false;
+	IsFinished = true; 
+	mEndGameText.setString("YOU WON !");
+	
 }
+
+void Game::IsOver()
+{
+	IsFinished = true;
+	// maybe create famous animation of Mario when he "dies"
+	mEndGameText.setString("GAME OVER !");
+}
+
 
 

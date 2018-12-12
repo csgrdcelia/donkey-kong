@@ -10,6 +10,8 @@ public:
 
 public:
 	void TryToEatCoin();
+	bool HasEatenAllCoins();
+	bool HasCollidedEnemy();
 	bool IsUnderLadder();
 	bool IsAboveLadder();
 private:
