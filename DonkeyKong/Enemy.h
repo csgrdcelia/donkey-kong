@@ -14,6 +14,5 @@ private:
 
 private:
 	bool GoesToTheRight = true;
-	const float	EnemySpeed;
 };
 

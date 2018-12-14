@@ -4,8 +4,9 @@
 
 
 
-Enemy::Enemy() : EnemySpeed(50.f)
+Enemy::Enemy() 
 {
+	Speed = 50.f;
 }
 
 Enemy::~Enemy()
@@ -14,13 +15,17 @@ Enemy::~Enemy()
 
 void Enemy::Move(sf::Time elapsedTime)
 {
-	this->ChangeSideIfOnEdge();
-	sf::Vector2f movement(0.f, 0.f);
-	if (this->GoesToTheRight)
-		movement.x += EnemySpeed;
-	else
-		movement.x -= EnemySpeed;
-	this->m_sprite.move(movement * elapsedTime.asSeconds());
+	if (IsUnderLadder())
+		GoUp(elapsedTime);
+	else {
+		this->ChangeSideIfOnEdge();
+		sf::Vector2f movement(0.f, 0.f);
+		if (this->GoesToTheRight)
+			movement.x += Speed;
+		else
+			movement.x -= Speed;
+		this->m_sprite.move(movement * elapsedTime.asSeconds());
+	}
 }
 
 void Enemy::ChangeSideIfOnEdge()

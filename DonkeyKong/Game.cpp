@@ -196,10 +196,8 @@ void Game::handlePlayerInput(sf::Keyboard::Key key, bool isPressed)
 
 void Game::update(sf::Time elapsedTime)
 {
-	if (mIsMovingUp) {
+	if (mIsMovingUp)
 		EntityManager::m_Player->GoUp(elapsedTime);
-		EntityManager::m_Player->Die(elapsedTime);
-	}
 	if (mIsMovingDown)
 		EntityManager::m_Player->GoDown(elapsedTime);
 	if (mIsMovingLeft)
