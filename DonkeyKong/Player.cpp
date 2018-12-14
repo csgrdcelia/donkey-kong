@@ -3,13 +3,59 @@
 #include "EntityManager.h"
 
 
-Player::Player()
+Player::Player() : PlayerSpeed(150.f)
 {
 }
 
 
 Player::~Player()
 {
+}
+
+void Player::GoRight(sf::Time elapsedTime)
+{
+	sf::Vector2f movement(0.f, 0.f);
+	movement.x += PlayerSpeed;
+	this->m_sprite.move(movement * elapsedTime.asSeconds());
+}
+
+void Player::GoLeft(sf::Time elapsedTime)
+{
+	sf::Vector2f movement(0.f, 0.f);
+	movement.x -= PlayerSpeed;
+	this->m_sprite.move(movement * elapsedTime.asSeconds());
+}
+
+void Player::GoUp(sf::Time elapsedTime)
+{
+	sf::Vector2f movement(0.f, 0.f);
+	if (this->IsUnderLadder())
+	{
+		movement.y -= PlayerSpeed;
+	}
+	this->m_sprite.move(movement * elapsedTime.asSeconds());
+}
+
+void Player::GoDown(sf::Time elapsedTime)
+{
+	sf::Vector2f movement(0.f, 0.f);
+	if (this->IsAboveLadder())
+	{
+		movement.y += PlayerSpeed;
+	}
+	this->m_sprite.move(movement * elapsedTime.asSeconds());
+}
+
+void Player::Die(sf::Time elapsedTime)
+{
+	for (int i = 0; i < 30; i++)
+	{
+		this->GoUp(elapsedTime);
+	}
+	while (this->m_position.y > 0)
+	{
+		this->GoDown(sf::microseconds(15000));
+	}
 }
 
 void Player::TryToEatCoin()

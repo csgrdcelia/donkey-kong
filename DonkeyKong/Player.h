@@ -9,16 +9,22 @@ public:
 	~Player();
 
 public:
+	void GoRight(sf::Time elapsedTime);
+	void GoLeft(sf::Time elapsedTime);
+	void GoUp(sf::Time elapsedTime);
+	void GoDown(sf::Time elapsedTime);
+	void Die(sf::Time elapsedTime);
 	void TryToEatCoin();
 	bool HasEatenAllCoins();
 	bool HasCollidedEnemy();
-	bool IsUnderLadder();
-	bool IsAboveLadder();
+	
 private:
 	bool CollidesBlock();
+	bool IsUnderLadder();
+	bool IsAboveLadder();
 
-public:
-	static const float	PlayerSpeed;
+private:
+	const float	PlayerSpeed;
 	
 
 };

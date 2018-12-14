@@ -7,9 +7,13 @@ public:
 	~Enemy();
 
 public:
-	bool GoesToTheRight = true;
+	void Move(sf::Time elapsedTime);
 
-public:
+private:
 	void ChangeSideIfOnEdge();
+
+private:
+	bool GoesToTheRight = true;
+	const float	EnemySpeed;
 };
 

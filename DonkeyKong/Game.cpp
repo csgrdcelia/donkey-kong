@@ -8,8 +8,6 @@
 #include "Block.h"
 
 
-const float Game::PlayerSpeed = 150.f;
-const float Game::EnemySpeed = 50.f;
 const sf::Time Game::TimePerFrame = sf::seconds(1.f / 60.f);
 
 Game::Game()
@@ -128,9 +126,9 @@ Game::Game()
 	mStatisticsText.setPosition(5.f, 5.f);
 	mStatisticsText.setCharacterSize(10);
 
-	// Draw win text
+	// Draw end game text
 	mEndGameText.setFont(mFont);
-	mEndGameText.setPosition(315.f, 10.f);
+	mEndGameText.setPosition(280.f, 10.f);
 	mEndGameText.setCharacterSize(50);
 	mEndGameText.setStyle(sf::Text::Bold);
 	mEndGameText.setFillColor(sf::Color::Red);
@@ -198,29 +196,22 @@ void Game::handlePlayerInput(sf::Keyboard::Key key, bool isPressed)
 
 void Game::update(sf::Time elapsedTime)
 {
-	sf::Vector2f movement(0.f, 0.f);
-	if (mIsMovingUp && EntityManager::m_Player->IsUnderLadder())
-		movement.y -= PlayerSpeed;
-	if (mIsMovingDown && EntityManager::m_Player->IsAboveLadder())
-		movement.y += PlayerSpeed;
+	if (mIsMovingUp) {
+		EntityManager::m_Player->GoUp(elapsedTime);
+		EntityManager::m_Player->Die(elapsedTime);
+	}
+	if (mIsMovingDown)
+		EntityManager::m_Player->GoDown(elapsedTime);
 	if (mIsMovingLeft)
-		movement.x -= PlayerSpeed;
+		EntityManager::m_Player->GoLeft(elapsedTime);
 	if (mIsMovingRight)
-		movement.x += PlayerSpeed;
-
-	EntityManager::m_Player->m_sprite.move(movement * elapsedTime.asSeconds());
+		EntityManager::m_Player->GoRight(elapsedTime);
 
 	EntityManager::m_Player->TryToEatCoin();
 
 	for (std::shared_ptr<Enemy> enemy : EntityManager::m_Enemies)
 	{
-		enemy->ChangeSideIfOnEdge();
-		sf::Vector2f movement(0.f, 0.f);
-		if (enemy->GoesToTheRight)
-			movement.x += EnemySpeed;
-		else
-			movement.x -= EnemySpeed;
-		enemy->m_sprite.move(movement * elapsedTime.asSeconds());
+		enemy->Move(elapsedTime);
 	}
 }
 
@@ -301,7 +292,6 @@ void Game::IsWon()
 void Game::IsOver()
 {
 	IsFinished = true;
-	// maybe create famous animation of Mario when he "dies"
 	mEndGameText.setString("GAME OVER !");
 }
 
