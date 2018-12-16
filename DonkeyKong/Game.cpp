@@ -252,6 +252,10 @@ void Game::render()
 		this->IsWon();
 	if (EntityManager::m_Player->HasCollidedEnemy())
 		this->IsOver();
+	if (EntityManager::m_Player->OnVoid())
+		EntityManager::m_Player->GoDown(sf::microseconds(10000));
+	if (EntityManager::m_Player->IsOutsideOfWindow())
+		IsOver();
 
 	mWindow.display();
 }

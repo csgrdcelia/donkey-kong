@@ -83,7 +83,7 @@ bool Entity::CollidesBlock() {
 	return false;
 }
 
-bool Entity::OnEdge()
+bool Entity::OnVoid()
 {
 	bool OnEdge = true;
 	for (std::shared_ptr<Entity> entity : EntityManager::m_Blocks)
@@ -95,5 +95,12 @@ bool Entity::OnEdge()
 			OnEdge = false;
 		}
 	}
-	return OnEdge;
+	return !IsOnLadder() && OnEdge;
+}
+
+bool Entity::IsOutsideOfWindow()
+{
+	if (this->m_sprite.getPosition().y > 600)
+		return true;
+	return false;
 }

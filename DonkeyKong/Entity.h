@@ -15,7 +15,8 @@ public:
 	bool IsOnLadder();
 	bool IsAboveOrOnLadder();
 	bool CollidesBlock();
-	bool OnEdge();
+	bool OnVoid();
+	bool IsOutsideOfWindow();
 
 public:
 	sf::Sprite m_sprite;

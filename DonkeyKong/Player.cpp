@@ -14,6 +14,18 @@ Player::~Player()
 }
 
 
+bool Player::GoDown(sf::Time elapsedTime)
+{
+	if (this->IsAboveOrOnLadder() || OnVoid())
+	{
+		sf::Vector2f movement(0.f, 0.f);
+		movement.y += Speed;
+		this->m_sprite.move(movement * elapsedTime.asSeconds());
+		return true;
+	}
+	return false;
+
+}
 
 void Player::TryToEatCoin()
 {

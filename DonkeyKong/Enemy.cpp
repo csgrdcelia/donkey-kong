@@ -61,7 +61,7 @@ void Enemy::GoLeftOrRight(sf::Time elapsedTime)
 
 void Enemy::ChangeSideIfOnEdge()
 {
-	if (OnEdge())
+	if (OnVoid())
 	{
 		if (Enemy::GoesToTheRight)
 			Enemy::GoesToTheRight = false;

@@ -13,6 +13,7 @@ public:
 	void TryToEatCoin();
 	bool HasEatenAllCoins();
 	bool HasCollidedEnemy();
+	bool GoDown(sf::Time elapsedTime);
 	
 
 
