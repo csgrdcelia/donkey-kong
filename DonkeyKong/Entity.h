@@ -10,12 +10,12 @@ public:
 public:
 	void GoRight(sf::Time elapsedTime);
 	void GoLeft(sf::Time elapsedTime);
-	void GoUp(sf::Time elapsedTime);
-	void GoDown(sf::Time elapsedTime);
-	bool IsUnderLadder();
-	bool IsAboveLadder();
+	bool GoUp(sf::Time elapsedTime);
+	bool GoDown(sf::Time elapsedTime);
+	bool IsOnLadder();
+	bool IsAboveOrOnLadder();
 	bool CollidesBlock();
-
+	bool OnEdge();
 
 public:
 	sf::Sprite m_sprite;

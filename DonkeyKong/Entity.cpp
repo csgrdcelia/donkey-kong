@@ -11,56 +11,62 @@ void Entity::GoRight(sf::Time elapsedTime)
 
 void Entity::GoLeft(sf::Time elapsedTime)
 {
+	
 	sf::Vector2f movement(0.f, 0.f);
 	movement.x -= Speed;
 	this->m_sprite.move(movement * elapsedTime.asSeconds());
 }
 
-void Entity::GoUp(sf::Time elapsedTime)
+bool Entity::GoUp(sf::Time elapsedTime)
 {
-	sf::Vector2f movement(0.f, 0.f);
-	if (this->IsUnderLadder())
+	if (this->IsOnLadder())
 	{
+		sf::Vector2f movement(0.f, 0.f);
 		movement.y -= Speed;
+		this->m_sprite.move(movement * elapsedTime.asSeconds());
+		return true;
 	}
-	this->m_sprite.move(movement * elapsedTime.asSeconds());
+	return false;
 }
 
-void Entity::GoDown(sf::Time elapsedTime)
+bool Entity::GoDown(sf::Time elapsedTime)
 {
-	sf::Vector2f movement(0.f, 0.f);
-	if (this->IsAboveLadder())
+	if (this->IsAboveOrOnLadder())
 	{
+		sf::Vector2f movement(0.f, 0.f);
 		movement.y += Speed;
+		this->m_sprite.move(movement * elapsedTime.asSeconds());
+		return true;
 	}
-	this->m_sprite.move(movement * elapsedTime.asSeconds());
+	return false;
+	
 }
 
-bool Entity::IsUnderLadder()
+bool Entity::IsOnLadder()
 {
 	for (std::shared_ptr<Entity> entity : EntityManager::m_Ladders)
 	{
 		sf::FloatRect fr = entity->m_sprite.getGlobalBounds();
-		fr.top -= 32; // so it can continue to hike when it's on the block
+		fr.top -= 33; // we add the height of the block texture so our entity can hike on it
+		fr.height += 33; 
 		if (this->m_sprite.getGlobalBounds().intersects(fr))
 		{
 			return true;
-			break;
 		}
 	}
 	return false;
 }
 
-bool Entity::IsAboveLadder()
+bool Entity::IsAboveOrOnLadder()
 {
 	for (std::shared_ptr<Entity> entity : EntityManager::m_Ladders)
 	{
 		sf::FloatRect fr = entity->m_sprite.getGlobalBounds();
-		fr.top -= 40;
-		if (EntityManager::m_Player->m_sprite.getGlobalBounds().intersects(fr))
+		fr.top -= this->m_size.y + 10;
+		fr.height += 15;
+		if (this->m_sprite.getGlobalBounds().intersects(fr))
 		{
 			return true;
-			break;
 		}
 	}
 	return false;
@@ -75,4 +81,19 @@ bool Entity::CollidesBlock() {
 		}
 	}
 	return false;
+}
+
+bool Entity::OnEdge()
+{
+	bool OnEdge = true;
+	for (std::shared_ptr<Entity> entity : EntityManager::m_Blocks)
+	{
+		sf::FloatRect fr = entity->m_sprite.getGlobalBounds();
+		fr.top -= 5;
+		if (this->m_sprite.getGlobalBounds().intersects(fr))
+		{
+			OnEdge = false;
+		}
+	}
+	return OnEdge;
 }

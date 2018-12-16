@@ -11,8 +11,12 @@ public:
 
 private:
 	void ChangeSideIfOnEdge();
+	void GoLeftOrRight(sf::Time elapsedTime);
 
 private:
 	bool GoesToTheRight = true;
+	bool IsGoingUp = false;
+	bool IsGoingDown = false;
+	int frameTimer = 0;
 };
 

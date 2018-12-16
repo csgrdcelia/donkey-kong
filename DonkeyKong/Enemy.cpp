@@ -4,9 +4,9 @@
 
 
 
-Enemy::Enemy() 
+Enemy::Enemy()
 {
-	Speed = 50.f;
+	Speed = 150.f;
 }
 
 Enemy::~Enemy()
@@ -15,32 +15,53 @@ Enemy::~Enemy()
 
 void Enemy::Move(sf::Time elapsedTime)
 {
-	if (IsUnderLadder())
-		GoUp(elapsedTime);
-	else {
-		this->ChangeSideIfOnEdge();
-		sf::Vector2f movement(0.f, 0.f);
-		if (this->GoesToTheRight)
-			movement.x += Speed;
-		else
-			movement.x -= Speed;
-		this->m_sprite.move(movement * elapsedTime.asSeconds());
+	if (IsGoingUp)
+	{
+		if (!GoUp(elapsedTime))
+		{
+			frameTimer = 100; // wait 100 frames before going up or down again
+			IsGoingUp = false;
+		}
 	}
+	else if (IsGoingDown)
+	{
+		if (!GoDown(elapsedTime))
+		{
+			frameTimer = 100; // wait 100 frames before going up or down again
+			IsGoingDown = false;
+		}
+	}
+	else
+	{
+		if (frameTimer == 0)
+		{
+			if (GoDown(elapsedTime))
+				IsGoingDown = true;
+			else if (GoUp(elapsedTime))
+				IsGoingUp = true;
+			else
+				GoLeftOrRight(elapsedTime);
+		}
+		else
+		{
+			frameTimer -= 1;
+			GoLeftOrRight(elapsedTime);
+		}
+	}
+}
+
+void Enemy::GoLeftOrRight(sf::Time elapsedTime)
+{
+	ChangeSideIfOnEdge();
+	if (GoesToTheRight)
+		GoRight(elapsedTime);
+	else
+		GoLeft(elapsedTime);
 }
 
 void Enemy::ChangeSideIfOnEdge()
 {
-	bool OnEdge = true;
-	for (std::shared_ptr<Entity> entity : EntityManager::m_Blocks)
-	{
-		sf::FloatRect fr = entity->m_sprite.getGlobalBounds();
-		fr.top -= 5; 
-		if (this->m_sprite.getGlobalBounds().intersects(fr))
-		{
-			OnEdge = false;
-		}
-	}
-	if (OnEdge)
+	if (OnEdge())
 	{
 		if (Enemy::GoesToTheRight)
 			Enemy::GoesToTheRight = false;
