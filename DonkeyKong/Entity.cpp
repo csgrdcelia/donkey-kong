@@ -11,7 +11,6 @@ void Entity::GoRight(sf::Time elapsedTime)
 
 void Entity::GoLeft(sf::Time elapsedTime)
 {
-	
 	sf::Vector2f movement(0.f, 0.f);
 	movement.x -= Speed;
 	this->m_sprite.move(movement * elapsedTime.asSeconds());

@@ -196,14 +196,27 @@ void Game::handlePlayerInput(sf::Keyboard::Key key, bool isPressed)
 
 void Game::update(sf::Time elapsedTime)
 {
+	mRightTexture.loadFromFile("Media/Textures/mario_right.png");
+	mLeftTexture.loadFromFile("Media/Textures/mario_left.png");
+	mUpTexture.loadFromFile("Media/Textures/mario_back.png");
+
 	if (mIsMovingUp)
+	{
 		EntityManager::m_Player->GoUp(elapsedTime);
-	if (mIsMovingDown)
-		EntityManager::m_Player->GoDown(elapsedTime);
+		EntityManager::m_Player->m_sprite.setTexture(mUpTexture);
+	}
+	//if (mIsMovingDown)
+		//EntityManager::m_Player->GoDown(elapsedTime);
 	if (mIsMovingLeft)
+	{
 		EntityManager::m_Player->GoLeft(elapsedTime);
+		EntityManager::m_Player->m_sprite.setTexture(mLeftTexture);
+	}
 	if (mIsMovingRight)
+	{
 		EntityManager::m_Player->GoRight(elapsedTime);
+		EntityManager::m_Player->m_sprite.setTexture(mRightTexture);
+	}
 
 	EntityManager::m_Player->TryToEatCoin();
 
@@ -252,8 +265,8 @@ void Game::render()
 		this->IsWon();
 	if (EntityManager::m_Player->HasCollidedEnemy())
 		this->IsOver();
-	if (EntityManager::m_Player->OnVoid())
-		EntityManager::m_Player->GoDown(sf::microseconds(10000));
+	//if (EntityManager::m_Player->OnVoid())
+		//EntityManager::m_Player->GoDown(sf::microseconds(10000));
 	if (EntityManager::m_Player->IsOutsideOfWindow())
 		IsOver();
 

@@ -14,18 +14,6 @@ Player::~Player()
 }
 
 
-bool Player::GoDown(sf::Time elapsedTime)
-{
-	if (this->IsAboveOrOnLadder() || OnVoid())
-	{
-		sf::Vector2f movement(0.f, 0.f);
-		movement.y += Speed;
-		this->m_sprite.move(movement * elapsedTime.asSeconds());
-		return true;
-	}
-	return false;
-
-}
 
 void Player::TryToEatCoin()
 {
@@ -60,19 +48,6 @@ bool Player::HasCollidedEnemy()
 		}
 	}
 	return false;
-}
-
-// not working because it should render between moves...
-void Player::Die(sf::Time elapsedTime)
-{
-	for (int i = 0; i < 30; i++)
-	{
-		this->GoUp(elapsedTime);
-	}
-	while (this->m_position.y > 0)
-	{
-		this->GoDown(sf::microseconds(15000));
-	}
 }
 
 
