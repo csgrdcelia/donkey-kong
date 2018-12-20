@@ -18,7 +18,7 @@ bool Player::GoDown(sf::Time elapsedTime)
 	if (this->IsAboveOrOnLadder() || OnVoid())
 	{
 		sf::Vector2f movement(0.f, 0.f);
-		movement.y += Speed*0.7;
+		movement.y += Speed;
 		this->m_sprite.move(movement * elapsedTime.asSeconds());
 		return true;
 	}
@@ -62,10 +62,3 @@ bool Player::HasCollidedEnemy()
 }
 
 
-void Player::Jump(sf::Time elapsedTime){
-	if(!this->CollidesBlock()){
-		sf::Vector2f movement(0.f, 0.f);
-		movement.y -= Speed*1.3;
-		this->m_sprite.move(movement * elapsedTime.asSeconds());
-	}
-}

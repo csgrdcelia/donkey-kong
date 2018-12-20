@@ -189,8 +189,10 @@ void Game::handlePlayerInput(sf::Keyboard::Key key, bool isPressed)
 		mIsMovingLeft = isPressed;
 	else if (key == sf::Keyboard::Right)
 		mIsMovingRight = isPressed;
+
 	if (key == sf::Keyboard::Space)
-		mIsJumping = isPressed;
+	{
+	}
 }
 
 void Game::update(sf::Time elapsedTime)
@@ -203,9 +205,7 @@ void Game::update(sf::Time elapsedTime)
 		EntityManager::m_Player->GoLeft(elapsedTime);
 	if (mIsMovingRight)
 		EntityManager::m_Player->GoRight(elapsedTime);
-	if (mIsJumping){
-		EntityManager::m_Player->Jump(elapsedTime);
-	}
+
 	EntityManager::m_Player->TryToEatCoin();
 
 	for (std::shared_ptr<Enemy> enemy : EntityManager::m_Enemies)
@@ -254,22 +254,15 @@ void Game::render()
 
 void Game::watchMario()
 {
-	std::cout << cptJump << std::endl;
 	std::shared_ptr<Player> mario = EntityManager::m_Player;
 	if (mario->HasEatenAllCoins())
 		this->IsWon();
 	if (mario->HasCollidedEnemy())
 		this->IsOver();
-	if (mario->OnVoid() && !mIsJumping)
+	if (mario->OnVoid())
 		mario->GoDown(sf::microseconds(10000));
 	if (mario->IsOutsideOfWindow())
 		IsOver();
-	if (cptJump == 60)
-		mIsJumping = false;
-	if (!mIsJumping)
-		cptJump = 0;
-	if (mIsJumping)
-		cptJump++;
 }
 
 void Game::updateStatistics(sf::Time elapsedTime)
