@@ -15,9 +15,6 @@ public:
 	bool HasCollidedEnemy();
 	bool GoDown(sf::Time elapsedTime);
 	
-
-
-	
-
+	void Jump(sf::Time elapsedTime);
 };
 

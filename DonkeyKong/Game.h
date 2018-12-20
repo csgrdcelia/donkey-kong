@@ -48,6 +48,8 @@ private:
 	bool mIsMovingDown;
 	bool mIsMovingRight;
 	bool mIsMovingLeft;
+	bool mIsJumping;
+	int cptJump = 0;
 
 	sf::Texture	_TextureEchelle;
 	sf::Sprite	_Echelle[LADDER_COUNT];
