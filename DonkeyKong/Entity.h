@@ -12,7 +12,7 @@ public:
 	void GoLeft(sf::Time elapsedTime);
 	bool GoUp(sf::Time elapsedTime);
 	bool GoDown(sf::Time elapsedTime);
-	bool IsOnLadder();
+	bool IsOnLadder();		
 	bool IsAboveOrOnLadder();
 	bool CollidesBlock();
 	bool OnVoid();

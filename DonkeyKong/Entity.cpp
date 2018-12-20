@@ -4,17 +4,30 @@
 
 void Entity::GoRight(sf::Time elapsedTime)
 {
-	sf::Vector2f movement(0.f, 0.f);
-	movement.x += Speed;
-	this->m_sprite.move(movement * elapsedTime.asSeconds());
+	if (!CollidesBlock()) 
+	{
+		sf::Vector2f movement(0.f, 0.f);
+		movement.x += Speed;
+		this->m_sprite.move(movement * elapsedTime.asSeconds());
+
+			/*while (CollidesBlock())
+				GoLeft(elapsedTime);*/
+
+	}
 }
 
 void Entity::GoLeft(sf::Time elapsedTime)
 {
-	
-	sf::Vector2f movement(0.f, 0.f);
-	movement.x -= Speed;
-	this->m_sprite.move(movement * elapsedTime.asSeconds());
+	if (!CollidesBlock()) 
+	{
+		sf::Vector2f movement(0.f, 0.f);
+		movement.x -= Speed;
+		this->m_sprite.move(movement * elapsedTime.asSeconds());
+
+			/*while (CollidesBlock())
+				GoRight(elapsedTime);*/
+
+	}
 }
 
 bool Entity::GoUp(sf::Time elapsedTime)
@@ -39,7 +52,6 @@ bool Entity::GoDown(sf::Time elapsedTime)
 		return true;
 	}
 	return false;
-	
 }
 
 bool Entity::IsOnLadder()
@@ -47,8 +59,13 @@ bool Entity::IsOnLadder()
 	for (std::shared_ptr<Entity> entity : EntityManager::m_Ladders)
 	{
 		sf::FloatRect fr = entity->m_sprite.getGlobalBounds();
-		fr.top -= 33; // we add the height of the block texture so our entity can hike on it
-		fr.height += 33; 
+		// we add the height of the block texture so our entity can hike on it
+		fr.top -= 33; 
+		fr.height += 33;
+		// we adjust the weight of the block so entities cannot go up if they intersect with only 1 pixel
+		fr.left += 13;
+		fr.width -= 20;
+
 		if (this->m_sprite.getGlobalBounds().intersects(fr))
 		{
 			return true;
@@ -63,7 +80,7 @@ bool Entity::IsAboveOrOnLadder()
 	{
 		sf::FloatRect fr = entity->m_sprite.getGlobalBounds();
 		fr.top -= this->m_size.y + 10;
-		fr.height += 15;
+		fr.height += 13;
 		if (this->m_sprite.getGlobalBounds().intersects(fr))
 		{
 			return true;
@@ -89,11 +106,11 @@ bool Entity::OnVoid()
 	for (std::shared_ptr<Entity> entity : EntityManager::m_Blocks)
 	{
 		sf::FloatRect fr = entity->m_sprite.getGlobalBounds();
-		fr.top -= 5;
-		if (this->m_sprite.getGlobalBounds().intersects(fr))
-		{
+		fr.top -= 5; 
+		fr.left += 5;
+		fr.width -= 10;
+		if (m_sprite.getGlobalBounds().intersects(fr))
 			OnEdge = false;
-		}
 	}
 	return !IsOnLadder() && OnEdge;
 }

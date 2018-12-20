@@ -45,17 +45,17 @@ Game::Game()
 		}
 	}
 
-	// Draw Echelles
+	// Draw ladders
 
 	_TextureEchelle.loadFromFile("Media/Textures/Echelle.png");
 
-	for (int i = 0; i < ECHELLE_COUNT; i++)
+	for (int i = 0; i < LADDER_COUNT; i++)
 	{
 		_Echelle[i].setTexture(_TextureEchelle);
-		_Echelle[i].setPosition(100.f + 70.f * (i + 1), BLOCK_SPACE * (i + 1) + _sizeBlock.y);
+		_Echelle[i].setPosition(100.f + 70.f * (i + 3), BLOCK_SPACE * (i + 1) + _sizeBlock.y);
 
 		std::shared_ptr<Ladder> se = std::make_shared<Ladder>();
-		se->m_sprite = _Echelle[i];
+		se->m_sprite = _Echelle[i];	
 		se->m_size = _TextureEchelle.getSize();
 		se->m_position = _Echelle[i].getPosition();
 		EntityManager::m_Ladders.push_back(se);
@@ -84,7 +84,7 @@ Game::Game()
 
 	_textureEnemy.loadFromFile("Media/Textures/enemy_1_right.png");
 
-	for (int i = 0; i < ECHELLE_COUNT; i++)
+	for (int i = 0; i < LADDER_COUNT; i++)
 	{
 		_enemy[i].setTexture(_textureEnemy);
 		_enemy[i].setPosition(100.f + 90.f * (i + 1), BLOCK_SPACE * (i + 1) + 78.f);
@@ -153,6 +153,7 @@ void Game::run()
 
 		updateStatistics(elapsedTime);
 		render();
+		watchMario();
 	}
 }
 
@@ -248,16 +249,20 @@ void Game::render()
 	mWindow.draw(mStatisticsText);
 	mWindow.draw(mEndGameText);
 
-	if (EntityManager::m_Player->HasEatenAllCoins())
-		this->IsWon();
-	if (EntityManager::m_Player->HasCollidedEnemy())
-		this->IsOver();
-	if (EntityManager::m_Player->OnVoid())
-		EntityManager::m_Player->GoDown(sf::microseconds(10000));
-	if (EntityManager::m_Player->IsOutsideOfWindow())
-		IsOver();
-
 	mWindow.display();
+}
+
+void Game::watchMario()
+{
+	std::shared_ptr<Player> mario = EntityManager::m_Player;
+	if (mario->HasEatenAllCoins())
+		this->IsWon();
+	if (mario->HasCollidedEnemy())
+		this->IsOver();
+	if (mario->OnVoid())
+		mario->GoDown(sf::microseconds(10000));
+	if (mario->IsOutsideOfWindow())
+		IsOver();
 }
 
 void Game::updateStatistics(sf::Time elapsedTime)

@@ -7,9 +7,9 @@ class Player : public Entity
 public:
 	Player();
 	~Player();
+	
 
 public:
-	void Die(sf::Time elapsedTime);
 	void TryToEatCoin();
 	bool HasEatenAllCoins();
 	bool HasCollidedEnemy();

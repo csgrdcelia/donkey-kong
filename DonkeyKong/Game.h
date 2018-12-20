@@ -1,6 +1,6 @@
 #pragma once
 
-#define ECHELLE_COUNT 4
+#define LADDER_COUNT 4
 #define BLOCK_COUNT_X 8
 #define BLOCK_COUNT_Y 5
 #define BLOCK_SPACE 110.f
@@ -19,6 +19,7 @@ private:
 	void processEvents();
 	void update(sf::Time elapsedTime);
 	void render();
+	void watchMario();
 
 	void updateStatistics(sf::Time elapsedTime);
 	void handlePlayerInput(sf::Keyboard::Key key, bool isPressed);
@@ -49,7 +50,7 @@ private:
 	bool mIsMovingLeft;
 
 	sf::Texture	_TextureEchelle;
-	sf::Sprite	_Echelle[ECHELLE_COUNT];
+	sf::Sprite	_Echelle[LADDER_COUNT];
 	sf::Texture	_TextureBlock;
 	sf::Sprite	_Block[BLOCK_COUNT_X][BLOCK_COUNT_Y];
 	sf::Texture	_TextureWeapon;

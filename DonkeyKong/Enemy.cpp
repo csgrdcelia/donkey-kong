@@ -6,7 +6,7 @@
 
 Enemy::Enemy()
 {
-	Speed = 150.f;
+	Speed = 100.f;
 }
 
 Enemy::~Enemy()
@@ -19,7 +19,7 @@ void Enemy::Move(sf::Time elapsedTime)
 	{
 		if (!GoUp(elapsedTime))
 		{
-			frameTimer = 100; // wait 100 frames before going up or down again
+			frameTimer = rand() % (700 - 30) + 30; // wait between 30 and 700 frames before going up or down again
 			IsGoingUp = false;
 		}
 	}
@@ -27,7 +27,7 @@ void Enemy::Move(sf::Time elapsedTime)
 	{
 		if (!GoDown(elapsedTime))
 		{
-			frameTimer = 100; // wait 100 frames before going up or down again
+			frameTimer = rand() % (700 - 30) + 30; // wait between 30 and 700 frames before going up or down again
 			IsGoingDown = false;
 		}
 	}

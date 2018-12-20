@@ -3,7 +3,7 @@
 #include "EntityManager.h"
 
 
-Player::Player() 
+Player::Player()
 {
 	Speed = 150.f;
 }
@@ -12,7 +12,6 @@ Player::Player()
 Player::~Player()
 {
 }
-
 
 bool Player::GoDown(sf::Time elapsedTime)
 {
@@ -60,19 +59,6 @@ bool Player::HasCollidedEnemy()
 		}
 	}
 	return false;
-}
-
-// not working because it should render between moves...
-void Player::Die(sf::Time elapsedTime)
-{
-	for (int i = 0; i < 30; i++)
-	{
-		this->GoUp(elapsedTime);
-	}
-	while (this->m_position.y > 0)
-	{
-		this->GoDown(sf::microseconds(15000));
-	}
 }
 
 
