@@ -2,12 +2,22 @@
 #include "Entity.h"
 #include "EntityManager.h"
 
+Entity::Entity()
+{
+}
+
+Entity::Entity(float x, float y)
+{
+	
+}
+
+
 void Entity::GoRight(sf::Time elapsedTime)
 {
 	if (!CollidesBlock()) 
 	{
 		sf::Vector2f movement(0.f, 0.f);
-		movement.x += Speed;
+		movement.x += m_speed;
 		this->m_sprite.move(movement * elapsedTime.asSeconds());
 
 			/*while (CollidesBlock())
@@ -21,7 +31,7 @@ void Entity::GoLeft(sf::Time elapsedTime)
 	if (!CollidesBlock()) 
 	{
 		sf::Vector2f movement(0.f, 0.f);
-		movement.x -= Speed;
+		movement.x -= m_speed;
 		this->m_sprite.move(movement * elapsedTime.asSeconds());
 
 			/*while (CollidesBlock())
@@ -35,7 +45,7 @@ bool Entity::GoUp(sf::Time elapsedTime)
 	if (this->IsOnLadder())
 	{
 		sf::Vector2f movement(0.f, 0.f);
-		movement.y -= Speed;
+		movement.y -= m_speed;
 		this->m_sprite.move(movement * elapsedTime.asSeconds());
 		return true;
 	}
@@ -47,7 +57,7 @@ bool Entity::GoDown(sf::Time elapsedTime)
 	if (this->IsAboveOrOnLadder())
 	{
 		sf::Vector2f movement(0.f, 0.f);
-		movement.y += Speed;
+		movement.y += m_speed;
 		this->m_sprite.move(movement * elapsedTime.asSeconds());
 		return true;
 	}
@@ -79,7 +89,7 @@ bool Entity::IsAboveOrOnLadder()
 	for (std::shared_ptr<Entity> entity : EntityManager::m_Ladders)
 	{
 		sf::FloatRect fr = entity->m_sprite.getGlobalBounds();
-		fr.top -= this->m_size.y + 10;
+		fr.top -= this->m_sprite.getTexture()->getSize().y + 10;
 		fr.height += 13;
 		if (this->m_sprite.getGlobalBounds().intersects(fr))
 		{
@@ -121,3 +131,4 @@ bool Entity::IsOutsideOfWindow()
 		return true;
 	return false;
 }
+

@@ -4,6 +4,7 @@ class Enemy : public Entity
 {
 public:
 	Enemy();
+	Enemy(float x, float y);
 	~Enemy();
 
 public:

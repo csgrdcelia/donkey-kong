@@ -1,10 +1,10 @@
 #pragma once
 
-#define LADDER_COUNT 4
-#define BLOCK_COUNT_X 8
-#define BLOCK_COUNT_Y 5
+//#define LADDER_COUNT 4
+//#define BLOCK_COUNT_X 8
+//#define BLOCK_COUNT_Y 5
 #define BLOCK_SPACE 110.f
-#define COIN_COUNT 4
+//#define COIN_COUNT 4
 #define COIN_SPACE 120.f
 #define ENEMY_COUNT 4
 
@@ -50,15 +50,14 @@ private:
 	bool mIsMovingLeft;
 
 	sf::Texture	_TextureEchelle;
-	sf::Sprite	_Echelle[LADDER_COUNT];
+	//sf::Sprite	_Echelle[LADDER_COUNT];
 	sf::Texture	_TextureBlock;
-	sf::Sprite	_Block[BLOCK_COUNT_X][BLOCK_COUNT_Y];
+	//sf::Sprite	_Block[BLOCK_COUNT_X][BLOCK_COUNT_Y];
 	sf::Texture	_TextureWeapon;
 	sf::Sprite	_Weapon;
 	sf::Vector2u _sizeBlock;
 	sf::Vector2u _sizeMario;
 	sf::Texture _textureCoin;
-	sf::Sprite _coin[COIN_COUNT][COIN_COUNT];
 	sf::Texture _textureEnemy;
 	sf::Sprite _enemy[ENEMY_COUNT];
 };

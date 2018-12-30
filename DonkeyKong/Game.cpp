@@ -25,98 +25,12 @@ Game::Game()
 {
 	mWindow.setFramerateLimit(160);
 
-	// Draw blocks
-
-	_TextureBlock.loadFromFile("Media/Textures/Block.png");
-	_sizeBlock = _TextureBlock.getSize();
-
-	for (int i = 0; i < BLOCK_COUNT_X; i++)
-	{
-		for (int j = 0; j < BLOCK_COUNT_Y; j++)
-		{
-			_Block[i][j].setTexture(_TextureBlock);
-			_Block[i][j].setPosition(100.f + 70.f * (i + 1), BLOCK_SPACE * (j + 1));
-
-			std::shared_ptr<Block> se = std::make_shared<Block>();
-			se->m_sprite = _Block[i][j];
-			se->m_size = _TextureBlock.getSize();
-			se->m_position = _Block[i][j].getPosition();
-			EntityManager::m_Blocks.push_back(se);
-		}
-	}
-
-	// Draw ladders
-
-	_TextureEchelle.loadFromFile("Media/Textures/Echelle.png");
-
-	for (int i = 0; i < LADDER_COUNT; i++)
-	{
-		_Echelle[i].setTexture(_TextureEchelle);
-		_Echelle[i].setPosition(100.f + 70.f * (i + 3), BLOCK_SPACE * (i + 1) + _sizeBlock.y);
-
-		std::shared_ptr<Ladder> se = std::make_shared<Ladder>();
-		se->m_sprite = _Echelle[i];	
-		se->m_size = _TextureEchelle.getSize();
-		se->m_position = _Echelle[i].getPosition();
-		EntityManager::m_Ladders.push_back(se);
-	}
-
-	// Draw coins
-
-	_textureCoin.loadFromFile("Media/Textures/coin.png");
-	for (int i = 0; i < COIN_COUNT; i++)
-	{
-		for (int j = 0; j < COIN_COUNT; j++)
-		{
-			_coin[i][j].setTexture(_textureCoin);
-			_coin[i][j].setPosition(100.f + 130.f * (j + 1), BLOCK_SPACE * (i + 1) + 50.f);
-
-			std::shared_ptr<Coin> se = std::make_shared<Coin>();
-			se->m_sprite = _coin[i][j];
-			se->m_size = _textureCoin.getSize();
-			se->m_position = _coin[i][j].getPosition();
-			if(!se->CollidesLadder())
-				EntityManager::m_Coins.push_back(se);
-		}
-	}
-
-	// Draw enemies
-
-	_textureEnemy.loadFromFile("Media/Textures/enemy_1_right.png");
-
-	for (int i = 0; i < LADDER_COUNT; i++)
-	{
-		_enemy[i].setTexture(_textureEnemy);
-		_enemy[i].setPosition(100.f + 90.f * (i + 1), BLOCK_SPACE * (i + 1) + 78.f);
-
-		std::shared_ptr<Enemy> se = std::make_shared<Enemy>();
-		se->m_sprite = _enemy[i];
-		se->m_size = _textureEnemy.getSize();
-		se->m_position = _enemy[i].getPosition();
-		EntityManager::m_Enemies.push_back(se);
-	}
+	EntityManager::DrawEntities();
 
 	// Draw Peach
 	mPeachTexture.loadFromFile("Media/Textures/peach.png");
 	mPeach.setTexture(mPeachTexture);
 	mPeach.setPosition(600.f, 55.f);
-
-	// Draw Mario
-
-	mTexture.loadFromFile("Media/Textures/mario_right.png"); // Mario_small.png");
-	_sizeMario = mTexture.getSize();
-	mPlayer.setTexture(mTexture);
-	sf::Vector2f posMario;
-	posMario.x = 100.f + 70.f;
-	posMario.y = BLOCK_SPACE * 5 - _sizeMario.y;
-
-	mPlayer.setPosition(posMario);
-
-	std::shared_ptr<Player> player = std::make_shared<Player>();
-	player->m_sprite = mPlayer;
-	player->m_size = mTexture.getSize();
-	player->m_position = mPlayer.getPosition();
-	EntityManager::m_Player = player;
 
 	// Draw Statistic Font 
 

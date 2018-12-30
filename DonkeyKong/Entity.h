@@ -3,9 +3,12 @@
 
 class Entity
 {
+
+protected:
+	Entity();
+	Entity(float x, float y);
 public:
-	Entity() { };
-	~Entity() { };
+	virtual ~Entity() { };
 
 public:
 	void GoRight(sf::Time elapsedTime);
@@ -20,14 +23,12 @@ public:
 
 public:
 	sf::Sprite m_sprite;
-	sf::Vector2u m_size;
-	sf::Vector2f m_position;
 	bool m_enabled = true;
-
-	// Enemy only
-	bool m_bLeftToRight = true;
 	int m_times = 0;
 
+protected:
+	sf::Texture m_texture;
+
 public:
-	float	Speed;
+	float	m_speed;
 };

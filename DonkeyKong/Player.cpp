@@ -3,11 +3,14 @@
 #include "EntityManager.h"
 
 
-Player::Player()
+Player::Player(float x, float y) : Entity(x, y)
 {
-	Speed = 150.f;
-}
+	m_speed = 150.f;
 
+	m_texture.loadFromFile("Media/Textures/mario_right.png");
+	m_sprite.setTexture(m_texture);
+	m_sprite.setPosition(x, y);
+}
 
 Player::~Player()
 {
@@ -18,7 +21,7 @@ bool Player::GoDown(sf::Time elapsedTime)
 	if (this->IsAboveOrOnLadder() || OnVoid())
 	{
 		sf::Vector2f movement(0.f, 0.f);
-		movement.y += Speed;
+		movement.y += m_speed;
 		this->m_sprite.move(movement * elapsedTime.asSeconds());
 		return true;
 	}

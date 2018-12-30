@@ -14,6 +14,7 @@ public:
 	~EntityManager();
 
 public:
+	static void AssignEntities();
 	static int GetCoinsEaten();
 
 public:

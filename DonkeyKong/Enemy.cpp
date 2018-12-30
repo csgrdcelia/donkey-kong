@@ -6,7 +6,15 @@
 
 Enemy::Enemy()
 {
-	Speed = 100.f;
+}
+
+Enemy::Enemy(float x, float y) : Entity(x, y)
+{
+	m_speed = 100.f;
+
+	m_texture.loadFromFile("Media/Textures/enemy_1_right.png");
+	m_sprite.setTexture(m_texture);
+	m_sprite.setPosition(x, y);
 }
 
 Enemy::~Enemy()
