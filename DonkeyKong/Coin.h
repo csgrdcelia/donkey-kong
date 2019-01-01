@@ -1,5 +1,6 @@
 #pragma once
 #include "Entity.h"
+#include "Ladder.h"
 
 class Coin : public Entity
 {
@@ -9,6 +10,6 @@ public:
 	~Coin();
 
 public:
-	bool CollidesLadder();
+	bool CollidesLadder(std::vector<std::shared_ptr<Ladder>> mLadders);
 };
 

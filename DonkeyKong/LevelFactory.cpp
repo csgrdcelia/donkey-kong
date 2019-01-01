@@ -32,11 +32,12 @@ void LevelFactory::Retry()
 
 void LevelFactory::PopulateLevelMap()
 {
+	mLevels.clear();
 	// LEVEL 1
 	std::shared_ptr<Level> level1 = std::make_shared<Level>();
 	mLevels.insert(std::pair<int, std::shared_ptr<Level>>(1, level1));
 
-	level1->mPlayer = std::make_shared<Player>(170.f, 510.f);
+	level1->mPlayer = std::make_shared<Player>(170.f, 470.f);
 	level1->mPeach = std::make_shared<Entity>(600.f, 55.f, "Media/Textures/peach.png");
 
 	for (int i = 0; i < 8; i++)
@@ -61,7 +62,7 @@ void LevelFactory::PopulateLevelMap()
 		for (int j = 0; j < 4; j++)
 		{
 			std::shared_ptr<Coin> se = std::make_shared<Coin>(100.f + 130.f * (j + 1), 110.f * (i + 1) + 50.f);
-			if (!se->CollidesLadder())
+			if (!se->CollidesLadder(level1->mLadders))
 				level1->mCoins.push_back(se);
 		}
 	}
@@ -75,9 +76,10 @@ void LevelFactory::PopulateLevelMap()
 
 	// LEVEL 2
 	std::shared_ptr<Level> level2 = std::make_shared<Level>();
-	mLevels.insert(std::pair<int, std::shared_ptr<Level>>(2, level1));
+	mLevels.insert(std::pair<int, std::shared_ptr<Level>>(2, level2));
 
-	level2->mPlayer = std::make_shared<Player>(170.f, 510.f);
+	level2->mPlayer = std::make_shared<Player>(170.f, 470);
+	level2->mPeach = std::make_shared<Entity>(600.f, 55.f, "Media/Textures/peach.png");
 
 	for (int i = 0; i < 8; i++)
 	{
@@ -101,7 +103,7 @@ void LevelFactory::PopulateLevelMap()
 		for (int j = 0; j < 4; j++)
 		{
 			std::shared_ptr<Coin> se = std::make_shared<Coin>(100.f + 130.f * (j + 1), 110.f * (i + 1) + 50.f);
-			if (!se->CollidesLadder())
+			if (!se->CollidesLadder(level2->mLadders))
 				level2->mCoins.push_back(se);
 		}
 	}

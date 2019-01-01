@@ -31,7 +31,7 @@ Game::Game()
 	// Draw end game text
 	mEndGameText.setFont(mFont);
 	mEndGameText.setPosition(280.f, 10.f);
-	mEndGameText.setCharacterSize(50);
+	mEndGameText.setCharacterSize(45);
 	mEndGameText.setStyle(sf::Text::Bold);
 	mEndGameText.setFillColor(sf::Color::Red);
 	
@@ -91,6 +91,8 @@ void Game::handlePlayerInput(sf::Keyboard::Key key, bool isPressed)
 		mIsMovingLeft = isPressed;
 	else if (key == sf::Keyboard::Right)
 		mIsMovingRight = isPressed;
+	else if (key == sf::Keyboard::Enter)
+		mEnterIsPressed = isPressed;
 
 	if (key == sf::Keyboard::Space)
 	{
@@ -101,6 +103,7 @@ void Game::update(sf::Time elapsedTime)
 {
 	switch(mGameState)
 	{
+
 	case GameState::Running:
 		if (mIsMovingUp)
 			mLevelFactory.GetLevel()->mPlayer->GoUp(elapsedTime);
@@ -114,15 +117,25 @@ void Game::update(sf::Time elapsedTime)
 		mLevelFactory.GetLevel()->mPlayer->TryToEatCoin();
 
 		for (std::shared_ptr<Enemy> enemy : mLevelFactory.GetLevel()->mEnemies)
-		{
 			enemy->Move(elapsedTime);
-		}
+		
 		break;
+
 	case GameState::End:
 		for (std::shared_ptr<Enemy> enemy : mLevelFactory.GetLevel()->mEnemies)
-		{
 			enemy->Move(elapsedTime);
+		
+		if (mEnterIsPressed)
+		{
+			if (mLevelFactory.GetLevel()->IsWon)
+				mLevelFactory.LevelUp();
+			else
+				mLevelFactory.Retry();
+
+			mEndGameText.setString("");
+			mGameState = GameState::Running;
 		}
+
 		break;
 	}
 }
@@ -206,11 +219,12 @@ void Game::IsOver(int state)
 	mGameState = GameState::End;
 	if (state == 0)
 	{
-		mEndGameText.setString("GAME OVER !");
+		mEndGameText.setString("GAME OVER !\nRetry?");
 	}
 	else
 	{
-		mEndGameText.setString("YOU WON !");
+		mLevelFactory.GetLevel()->IsWon = true;
+		mEndGameText.setString("YOU WON !\nEnter for next level");
 	}
 }
 

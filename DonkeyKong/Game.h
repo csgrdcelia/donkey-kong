@@ -50,5 +50,6 @@ private:
 	bool mIsMovingDown;
 	bool mIsMovingRight;
 	bool mIsMovingLeft;
+	bool mEnterIsPressed;
 };
 

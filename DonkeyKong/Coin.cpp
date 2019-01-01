@@ -19,9 +19,9 @@ Coin::~Coin()
 {
 }
 
-bool Coin::CollidesLadder()
+bool Coin::CollidesLadder(std::vector<std::shared_ptr<Ladder>> mLadders)
 {
-	for (std::shared_ptr<Entity> entity : LevelFactory::GetLevel()->mLadders)
+	for (std::shared_ptr<Entity> entity : mLadders)
 	{
 		sf::FloatRect fr = entity->m_sprite.getGlobalBounds();
 		fr.top -= 30; // so Mario can continue to hike when he's on the block

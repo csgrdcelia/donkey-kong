@@ -14,7 +14,9 @@ public:
 
 public:
 	int GetCoinsEaten();
+
 public:
+	bool IsWon = false;
 	std::shared_ptr<Player> mPlayer;
 	std::shared_ptr<Entity> mPeach;
 	std::vector<std::shared_ptr<Block>> mBlocks;
