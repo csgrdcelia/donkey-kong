@@ -1,19 +1,15 @@
 #include "pch.h"
 #include "StringHelpers.h"
 #include "Entity.h"
-#include "EntityManager.h"
 #include "Game.h"
 #include "Player.h"
 #include "Ladder.h"
 #include "Block.h"
 
-
 const sf::Time Game::TimePerFrame = sf::seconds(1.f / 60.f);
 
 Game::Game()
 	: mWindow(sf::VideoMode(840, 600), "Donkey Kong 1981", sf::Style::Close)
-	, mTexture()
-	, mPlayer()
 	, mFont()
 	, mStatisticsText()
 	, mStatisticsUpdateTime()
@@ -25,15 +21,7 @@ Game::Game()
 {
 	mWindow.setFramerateLimit(160);
 
-	EntityManager::DrawEntities();
-
-	// Draw Peach
-	mPeachTexture.loadFromFile("Media/Textures/peach.png");
-	mPeach.setTexture(mPeachTexture);
-	mPeach.setPosition(600.f, 55.f);
-
 	// Draw Statistic Font 
-
 	mFont.loadFromFile("Media/Sansation.ttf");
 	mStatisticsText.setString("Welcome to Donkey Kong 1981");
 	mStatisticsText.setFont(mFont);
@@ -111,20 +99,31 @@ void Game::handlePlayerInput(sf::Keyboard::Key key, bool isPressed)
 
 void Game::update(sf::Time elapsedTime)
 {
-	if (mIsMovingUp)
-		EntityManager::m_Player->GoUp(elapsedTime);
-	if (mIsMovingDown)
-		EntityManager::m_Player->GoDown(elapsedTime);
-	if (mIsMovingLeft)
-		EntityManager::m_Player->GoLeft(elapsedTime);
-	if (mIsMovingRight)
-		EntityManager::m_Player->GoRight(elapsedTime);
-
-	EntityManager::m_Player->TryToEatCoin();
-
-	for (std::shared_ptr<Enemy> enemy : EntityManager::m_Enemies)
+	switch(mGameState)
 	{
-		enemy->Move(elapsedTime);
+	case GameState::Running:
+		if (mIsMovingUp)
+			mLevelFactory.GetLevel()->mPlayer->GoUp(elapsedTime);
+		if (mIsMovingDown)
+			mLevelFactory.GetLevel()->mPlayer->GoDown(elapsedTime);
+		if (mIsMovingLeft)
+			mLevelFactory.GetLevel()->mPlayer->GoLeft(elapsedTime);
+		if (mIsMovingRight)
+			mLevelFactory.GetLevel()->mPlayer->GoRight(elapsedTime);
+
+		mLevelFactory.GetLevel()->mPlayer->TryToEatCoin();
+
+		for (std::shared_ptr<Enemy> enemy : mLevelFactory.GetLevel()->mEnemies)
+		{
+			enemy->Move(elapsedTime);
+		}
+		break;
+	case GameState::End:
+		for (std::shared_ptr<Enemy> enemy : mLevelFactory.GetLevel()->mEnemies)
+		{
+			enemy->Move(elapsedTime);
+		}
+		break;
 	}
 }
 
@@ -132,34 +131,33 @@ void Game::render()
 {
 	mWindow.clear();
 
-	for (std::shared_ptr<Entity> entity : EntityManager::m_Blocks)
+	for (std::shared_ptr<Entity> entity : mLevelFactory.GetLevel()->mBlocks)
 	{
 		if (entity->m_enabled)
 			mWindow.draw(entity->m_sprite);
 	}
 
-	for (std::shared_ptr<Entity> entity : EntityManager::m_Ladders)
+	for (std::shared_ptr<Entity> entity : mLevelFactory.GetLevel()->mLadders)
 	{
 		if (entity->m_enabled)
 			mWindow.draw(entity->m_sprite);
 	}
 
-	for (std::shared_ptr<Entity> entity : EntityManager::m_Coins)
+	for (std::shared_ptr<Entity> entity : mLevelFactory.GetLevel()->mCoins)
 	{
 		if (entity->m_enabled)
 			mWindow.draw(entity->m_sprite);
 	}
 
-	for (std::shared_ptr<Entity> entity : EntityManager::m_Enemies)
+	for (std::shared_ptr<Entity> entity : mLevelFactory.GetLevel()->mEnemies)
 	{
 		if (entity->m_enabled)
 			mWindow.draw(entity->m_sprite);
 	}
 
-	mWindow.draw(EntityManager::m_Player->m_sprite);
-	mWindow.draw(Game::mPeach);
+	mWindow.draw(mLevelFactory.GetLevel()->mPlayer->m_sprite);
+	mWindow.draw(mLevelFactory.GetLevel()->mPeach->m_sprite);
 
-	
 	mWindow.draw(mStatisticsText);
 	mWindow.draw(mEndGameText);
 
@@ -168,15 +166,15 @@ void Game::render()
 
 void Game::watchMario()
 {
-	std::shared_ptr<Player> mario = EntityManager::m_Player;
+	std::shared_ptr<Player> mario = mLevelFactory.GetLevel()->mPlayer;
 	if (mario->HasEatenAllCoins())
-		this->IsWon();
+		this->IsOver(1);
 	if (mario->HasCollidedEnemy())
-		this->IsOver();
+		this->IsOver(0);
 	if (mario->OnVoid())
 		mario->GoDown(sf::microseconds(10000));
 	if (mario->IsOutsideOfWindow())
-		IsOver();
+		IsOver(0);
 }
 
 void Game::updateStatistics(sf::Time elapsedTime)
@@ -189,7 +187,7 @@ void Game::updateStatistics(sf::Time elapsedTime)
 		mStatisticsText.setString(
 			"Frames / Second = " + toString(mStatisticsNumFrames) + "\n" +
 			"Time / Update = " + toString(mStatisticsUpdateTime.asMicroseconds() / mStatisticsNumFrames) + "us\n" +
-			toString(EntityManager::GetCoinsEaten()) + "/" + toString(EntityManager::m_Coins.size()) + " coins"
+			toString(mLevelFactory.GetLevel()->GetCoinsEaten()) + "/" + toString(mLevelFactory.GetLevel()->mCoins.size()) + " coins"
 		);
 
 		mStatisticsUpdateTime -= sf::seconds(1.0f);
@@ -203,18 +201,19 @@ void Game::updateStatistics(sf::Time elapsedTime)
 	}
 }
 
-void Game::IsWon()
+void Game::IsOver(int state)
 {
-	IsFinished = true; 
-	mEndGameText.setString("YOU WON !");
-	
+	mGameState = GameState::End;
+	if (state == 0)
+	{
+		mEndGameText.setString("GAME OVER !");
+	}
+	else
+	{
+		mEndGameText.setString("YOU WON !");
+	}
 }
 
-void Game::IsOver()
-{
-	IsFinished = true;
-	mEndGameText.setString("GAME OVER !");
-}
 
 
 

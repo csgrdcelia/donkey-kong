@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "Player.h"
-#include "EntityManager.h"
+#include "LevelFactory.h"
 
 
 Player::Player(float x, float y) : Entity(x, y)
@@ -31,7 +31,7 @@ bool Player::GoDown(sf::Time elapsedTime)
 
 void Player::TryToEatCoin()
 {
-	for (std::shared_ptr<Entity> entity : EntityManager::m_Coins)
+	for (std::shared_ptr<Entity> entity : LevelFactory::GetLevel()->mCoins)
 	{
 		sf::FloatRect fr = entity->m_sprite.getGlobalBounds();
 		if (this->m_sprite.getGlobalBounds().intersects(fr))
@@ -44,7 +44,7 @@ void Player::TryToEatCoin()
 
 bool Player::HasEatenAllCoins()
 {
-	if (EntityManager::GetCoinsEaten() == EntityManager::m_Coins.size())
+	if (LevelFactory::GetLevel()->GetCoinsEaten() == LevelFactory::GetLevel()->mCoins.size())
 	{
 		return true;
 	}
@@ -53,7 +53,7 @@ bool Player::HasEatenAllCoins()
 
 bool Player::HasCollidedEnemy()
 {
-	for (std::shared_ptr<Entity> entity : EntityManager::m_Enemies)
+	for (std::shared_ptr<Entity> entity : LevelFactory::GetLevel()->mEnemies)
 	{
 		sf::FloatRect fr = entity->m_sprite.getGlobalBounds();
 		if (this->m_sprite.getGlobalBounds().intersects(fr))

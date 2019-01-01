@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "Entity.h"
-#include "EntityManager.h"
+#include "LevelFactory.h"
 
 Entity::Entity()
 {
@@ -9,6 +9,13 @@ Entity::Entity()
 Entity::Entity(float x, float y)
 {
 	
+}
+
+Entity::Entity(float x, float y, std::string pathToPNG)
+{
+	m_texture.loadFromFile(pathToPNG);
+	m_sprite.setTexture(m_texture);
+	m_sprite.setPosition(x, y);
 }
 
 
@@ -66,7 +73,7 @@ bool Entity::GoDown(sf::Time elapsedTime)
 
 bool Entity::IsOnLadder()
 {
-	for (std::shared_ptr<Entity> entity : EntityManager::m_Ladders)
+	for (std::shared_ptr<Entity> entity : LevelFactory::GetLevel()->mLadders)
 	{
 		sf::FloatRect fr = entity->m_sprite.getGlobalBounds();
 		// we add the height of the block texture so our entity can hike on it
@@ -86,7 +93,7 @@ bool Entity::IsOnLadder()
 
 bool Entity::IsAboveOrOnLadder()
 {
-	for (std::shared_ptr<Entity> entity : EntityManager::m_Ladders)
+	for (std::shared_ptr<Entity> entity : LevelFactory::GetLevel()->mLadders)
 	{
 		sf::FloatRect fr = entity->m_sprite.getGlobalBounds();
 		fr.top -= this->m_sprite.getTexture()->getSize().y + 10;
@@ -100,7 +107,7 @@ bool Entity::IsAboveOrOnLadder()
 }
 
 bool Entity::CollidesBlock() {
-	for (std::shared_ptr<Entity> entity : EntityManager::m_Blocks)
+	for (std::shared_ptr<Entity> entity : LevelFactory::GetLevel()->mBlocks)
 	{
 		if (this->m_sprite.getGlobalBounds().intersects(entity->m_sprite.getGlobalBounds()))
 		{
@@ -113,7 +120,7 @@ bool Entity::CollidesBlock() {
 bool Entity::OnVoid()
 {
 	bool OnEdge = true;
-	for (std::shared_ptr<Entity> entity : EntityManager::m_Blocks)
+	for (std::shared_ptr<Entity> entity : LevelFactory::GetLevel()->mBlocks)
 	{
 		sf::FloatRect fr = entity->m_sprite.getGlobalBounds();
 		fr.top -= 5; 

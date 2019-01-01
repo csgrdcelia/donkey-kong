@@ -7,6 +7,13 @@
 //#define COIN_COUNT 4
 #define COIN_SPACE 120.f
 #define ENEMY_COUNT 4
+#include "LevelFactory.h"
+
+enum GameState
+{
+	Running,
+	End
+};
 
 class Game
 {
@@ -23,42 +30,25 @@ private:
 
 	void updateStatistics(sf::Time elapsedTime);
 	void handlePlayerInput(sf::Keyboard::Key key, bool isPressed);
-	void IsOver();
-	void IsWon();
+	void IsOver(int state);
 
 private:
-	static const float		PlayerSpeed;
-	static const float		EnemySpeed;
 	static const sf::Time	TimePerFrame;
-
-	bool IsFinished;
+	GameState		mGameState = GameState::Running;
+	LevelFactory	mLevelFactory;
 
 	sf::RenderWindow		mWindow;
-	sf::Texture	mTexture;
-	sf::Sprite	mPlayer;
 	sf::Font	mFont;
 	sf::Text	mStatisticsText;
 	sf::Time	mStatisticsUpdateTime;
 	sf::Text	mEndGameText;
 	sf::Sprite	mPeach;
 	sf::Texture mPeachTexture;
-
 	std::size_t	mStatisticsNumFrames;
+
 	bool mIsMovingUp;
 	bool mIsMovingDown;
 	bool mIsMovingRight;
 	bool mIsMovingLeft;
-
-	sf::Texture	_TextureEchelle;
-	//sf::Sprite	_Echelle[LADDER_COUNT];
-	sf::Texture	_TextureBlock;
-	//sf::Sprite	_Block[BLOCK_COUNT_X][BLOCK_COUNT_Y];
-	sf::Texture	_TextureWeapon;
-	sf::Sprite	_Weapon;
-	sf::Vector2u _sizeBlock;
-	sf::Vector2u _sizeMario;
-	sf::Texture _textureCoin;
-	sf::Texture _textureEnemy;
-	sf::Sprite _enemy[ENEMY_COUNT];
 };
 

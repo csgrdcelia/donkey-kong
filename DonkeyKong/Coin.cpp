@@ -1,6 +1,6 @@
 #include "pch.h"
 #include "Coin.h"
-#include "EntityManager.h"
+#include "LevelFactory.h"
 
 
 Coin::Coin()
@@ -21,7 +21,7 @@ Coin::~Coin()
 
 bool Coin::CollidesLadder()
 {
-	for (std::shared_ptr<Entity> entity : EntityManager::m_Ladders)
+	for (std::shared_ptr<Entity> entity : LevelFactory::GetLevel()->mLadders)
 	{
 		sf::FloatRect fr = entity->m_sprite.getGlobalBounds();
 		fr.top -= 30; // so Mario can continue to hike when he's on the block
