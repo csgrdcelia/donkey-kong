@@ -33,6 +33,7 @@ void LevelFactory::Retry()
 void LevelFactory::PopulateLevelMap()
 {
 	mLevels.clear();
+
 	// LEVEL 1
 	std::shared_ptr<Level> level1 = std::make_shared<Level>();
 	mLevels.insert(std::pair<int, std::shared_ptr<Level>>(1, level1));
@@ -40,20 +41,23 @@ void LevelFactory::PopulateLevelMap()
 	level1->mPlayer = std::make_shared<Player>(170.f, 470.f);
 	level1->mPeach = std::make_shared<Entity>(600.f, 55.f, "Media/Textures/peach.png");
 
+	// Blocks
 	for (int i = 0; i < 8; i++)
-	{
 		for (int j = 0; j < 5; j++)
 		{
-			std::shared_ptr<Block> se = std::make_shared<Block>(100.f + 70.f * (i + 1.f), 110.f * (j + 1.f));
-			level1->mBlocks.push_back(se);
+			if (!(j == 3 && (i == 3 || i == 4)))
+			{
+				std::shared_ptr<Block> se = std::make_shared<Block>(100.f + 70.f * (i + 1.f), 110.f * (j + 1.f));
+				level1->mBlocks.push_back(se);
+			} 
 		}
-	}
 
 	// Ladders
-	for (int i = 0; i < 4; i++)
+	std::pair<float, float> laddersPositions[5]{ std::make_pair(540.f, 473.f), std::make_pair(680.f, 363.f), std::make_pair(280.f, 363.f), std::make_pair(540.f, 253.f), std::make_pair(280.f, 143.f) };
+	for (const std::pair<float, float> ladderPosition : laddersPositions)
 	{
-		std::shared_ptr<Ladder> se = std::make_shared<Ladder>(100.f + 70.f * (i + 3), 110.f * (i + 1) + 33);
-		level1->mLadders.push_back(se);
+		std::shared_ptr<Ladder> ladder = std::make_shared<Ladder>(ladderPosition.first, ladderPosition.second);
+		level1->mLadders.push_back(ladder);
 	}
 
 	// Coins
