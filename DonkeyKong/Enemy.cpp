@@ -61,9 +61,17 @@ void Enemy::GoLeftOrRight(sf::Time elapsedTime)
 {
 	ChangeSideIfOnEdge();
 	if (GoesToTheRight)
+	{
 		GoRight(elapsedTime);
+		m_texture.loadFromFile("Media/Textures/enemy_1_right.png");
+		m_sprite.setTexture(m_texture);
+	}
 	else
+	{
 		GoLeft(elapsedTime);
+		m_texture.loadFromFile("Media/Textures/enemy_2_left.png");
+		m_sprite.setTexture(m_texture);
+	}
 }
 
 void Enemy::ChangeSideIfOnEdge()

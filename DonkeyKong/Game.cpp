@@ -101,18 +101,34 @@ void Game::handlePlayerInput(sf::Keyboard::Key key, bool isPressed)
 
 void Game::update(sf::Time elapsedTime)
 {
+	mRightTexture.loadFromFile("Media/Textures/mario_right.png");
+	mLeftTexture.loadFromFile("Media/Textures/mario_left.png");
+	mUpTexture.loadFromFile("Media/Textures/mario_back.png");
+
 	switch(mGameState)
 	{
 
 	case GameState::Running:
 		if (mIsMovingUp)
+		{
 			mLevelFactory.GetLevel()->mPlayer->GoUp(elapsedTime);
+			mLevelFactory.GetLevel()->mPlayer->m_sprite.setTexture(mUpTexture);
+		}
+
 		if (mIsMovingDown)
 			mLevelFactory.GetLevel()->mPlayer->GoDown(elapsedTime);
+			
 		if (mIsMovingLeft)
+		{
 			mLevelFactory.GetLevel()->mPlayer->GoLeft(elapsedTime);
+			mLevelFactory.GetLevel()->mPlayer->m_sprite.setTexture(mLeftTexture);
+		}
+
 		if (mIsMovingRight)
+		{
 			mLevelFactory.GetLevel()->mPlayer->GoRight(elapsedTime);
+			mLevelFactory.GetLevel()->mPlayer->m_sprite.setTexture(mRightTexture);
+		}
 
 		mLevelFactory.GetLevel()->mPlayer->TryToEatCoin();
 
