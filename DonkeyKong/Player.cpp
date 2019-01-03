@@ -64,4 +64,25 @@ bool Player::HasCollidedEnemy()
 	return false;
 }
 
+void Player::GoLeft(sf::Time elapsedTime)
+{
+	m_texture.loadFromFile(m_leftTexturePath);
+	m_sprite.setTexture(m_texture);
+	Entity::GoLeft(elapsedTime);
+}
+
+void Player::GoRight(sf::Time elapsedTime)
+{
+	m_texture.loadFromFile(m_rightTexturePath);
+	m_sprite.setTexture(m_texture);
+	Entity::GoRight(elapsedTime);
+}
+
+bool Player::GoUp(sf::Time elapsedTime)
+{
+	m_texture.loadFromFile(m_upTexturePath);
+	m_sprite.setTexture(m_texture);
+	return Entity::GoUp(elapsedTime); 
+}
+
 

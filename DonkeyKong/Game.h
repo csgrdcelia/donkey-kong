@@ -45,10 +45,6 @@ private:
 	sf::Sprite	mPeach;
 	sf::Texture mPeachTexture;
 
-	sf::Texture mRightTexture;
-	sf::Texture mLeftTexture;
-	sf::Texture mUpTexture;
-
 	std::size_t	mStatisticsNumFrames;
 
 	bool mIsMovingUp;

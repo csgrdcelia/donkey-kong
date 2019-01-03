@@ -63,14 +63,10 @@ void Enemy::GoLeftOrRight(sf::Time elapsedTime)
 	if (GoesToTheRight)
 	{
 		GoRight(elapsedTime);
-		m_texture.loadFromFile("Media/Textures/enemy_1_right.png");
-		m_sprite.setTexture(m_texture);
 	}
 	else
 	{
 		GoLeft(elapsedTime);
-		m_texture.loadFromFile("Media/Textures/enemy_2_left.png");
-		m_sprite.setTexture(m_texture);
 	}
 }
 
@@ -83,4 +79,18 @@ void Enemy::ChangeSideIfOnEdge()
 		else
 			Enemy::GoesToTheRight = true;
 	}
+}
+
+void Enemy::GoLeft(sf::Time elapsedTime)
+{
+	m_texture.loadFromFile(m_leftTexturePath);
+	m_sprite.setTexture(m_texture);
+	Entity::GoLeft(elapsedTime);
+}
+
+void Enemy::GoRight(sf::Time elapsedTime)
+{
+	m_texture.loadFromFile(m_rightTexturePath);
+	m_sprite.setTexture(m_texture);
+	Entity::GoRight(elapsedTime);
 }

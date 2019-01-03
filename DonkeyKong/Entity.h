@@ -14,9 +14,9 @@ public:
 	virtual ~Entity() { };
 
 public:
-	void GoRight(sf::Time elapsedTime);
-	void GoLeft(sf::Time elapsedTime);
-	bool GoUp(sf::Time elapsedTime);
+	virtual void GoRight(sf::Time elapsedTime);
+	virtual void GoLeft(sf::Time elapsedTime);
+	virtual bool GoUp(sf::Time elapsedTime);
 	bool GoDown(sf::Time elapsedTime);
 	bool IsOnLadder();		
 	bool IsAboveOrOnLadder();
