@@ -85,4 +85,25 @@ bool Player::GoUp(sf::Time elapsedTime)
 	return Entity::GoUp(elapsedTime); 
 }
 
+void Player::Dies()
+{	
+	if (mDiesBuffer.loadFromFile(m_deathSoundPath))
+	{
+		mDeathSound.setBuffer(mDiesBuffer);
+		mDeathSound.play();
+		mDeathSound.setPlayingOffset(sf::seconds(2.f));
+	}
+}
+
+void Player::Wins()
+{
+	if (mWinsBuffer.loadFromFile(m_win1SoundPath))
+	{
+		mWin1Sound.setBuffer(mWinsBuffer);
+		mWin1Sound.play();
+		mWin1Sound.setPlayingOffset(sf::seconds(2.f));
+	}
+}
+
+
 
