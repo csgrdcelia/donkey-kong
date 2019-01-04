@@ -50,6 +50,7 @@ private:
 	bool mIsMovingLeft;
 	bool mIsJumping;
 	int cptJump = 0;
+	int cptFall = 25;
 
 	sf::Texture	_TextureEchelle;
 	sf::Sprite	_Echelle[LADDER_COUNT];

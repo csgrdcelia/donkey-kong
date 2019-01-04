@@ -256,13 +256,14 @@ void Game::render()
 
 void Game::watchMario()
 {
-	std::cout << cptJump << std::endl;
+	std::cout << "cptJump : " << cptJump << std::endl;
+	std::cout << "cptFall : " << cptFall << std::endl;
 	std::shared_ptr<Player> mario = EntityManager::m_Player;
 	if (mario->HasEatenAllCoins())
 		this->IsWon();
 	if (mario->HasCollidedEnemy())
 		this->IsOver();
-	if (mario->OnVoid() && !mIsJumping)
+	if ((mario->OnVoid() && !mIsJumping) || (mario->IsOnLadder() && !mIsJumping && cptFall != 25))
 		mario->GoDown(sf::microseconds(10000));
 	if (mario->IsOutsideOfWindow())
 		IsOver();
@@ -270,8 +271,13 @@ void Game::watchMario()
 		mIsJumping = false;
 	if (!mIsJumping)
 		cptJump = 0;
-	if (mIsJumping)
+	if (!mIsJumping && cptFall != 25)
+		cptFall++;
+	if (mIsJumping) {
 		cptJump++;
+		cptFall--;
+	}
+
 }
 
 void Game::updateStatistics(sf::Time elapsedTime)

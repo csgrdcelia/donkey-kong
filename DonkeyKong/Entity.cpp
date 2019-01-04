@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Entity.h"
 #include "EntityManager.h"
+#include "Game.h"
 
 void Entity::GoRight(sf::Time elapsedTime)
 {
