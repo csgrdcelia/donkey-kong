@@ -5,6 +5,8 @@ class Block : public Entity
 {
 public:
 	Block();
-	~Block();
+	Block(float x, float y);
+	virtual ~Block();
+
 };
 

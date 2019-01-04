@@ -1,19 +1,15 @@
 #include "pch.h"
 #include "StringHelpers.h"
 #include "Entity.h"
-#include "EntityManager.h"
 #include "Game.h"
 #include "Player.h"
 #include "Ladder.h"
 #include "Block.h"
 
-
 const sf::Time Game::TimePerFrame = sf::seconds(1.f / 60.f);
 
 Game::Game()
 	: mWindow(sf::VideoMode(840, 600), "Donkey Kong 1981", sf::Style::Close)
-	, mTexture()
-	, mPlayer()
 	, mFont()
 	, mStatisticsText()
 	, mStatisticsUpdateTime()
@@ -25,101 +21,7 @@ Game::Game()
 {
 	mWindow.setFramerateLimit(160);
 
-	// Draw blocks
-
-	_TextureBlock.loadFromFile("Media/Textures/Block.png");
-	_sizeBlock = _TextureBlock.getSize();
-
-	for (int i = 0; i < BLOCK_COUNT_X; i++)
-	{
-		for (int j = 0; j < BLOCK_COUNT_Y; j++)
-		{
-			_Block[i][j].setTexture(_TextureBlock);
-			_Block[i][j].setPosition(100.f + 70.f * (i + 1), BLOCK_SPACE * (j + 1));
-
-			std::shared_ptr<Block> se = std::make_shared<Block>();
-			se->m_sprite = _Block[i][j];
-			se->m_size = _TextureBlock.getSize();
-			se->m_position = _Block[i][j].getPosition();
-			EntityManager::m_Blocks.push_back(se);
-		}
-	}
-
-	// Draw ladders
-
-	_TextureEchelle.loadFromFile("Media/Textures/Echelle.png");
-
-	for (int i = 0; i < LADDER_COUNT; i++)
-	{
-		_Echelle[i].setTexture(_TextureEchelle);
-		_Echelle[i].setPosition(100.f + 70.f * (i + 3), BLOCK_SPACE * (i + 1) + _sizeBlock.y);
-
-		std::shared_ptr<Ladder> se = std::make_shared<Ladder>();
-		se->m_sprite = _Echelle[i];	
-		se->m_size = _TextureEchelle.getSize();
-		se->m_position = _Echelle[i].getPosition();
-		EntityManager::m_Ladders.push_back(se);
-	}
-
-	// Draw coins
-
-	_textureCoin.loadFromFile("Media/Textures/coin.png");
-	for (int i = 0; i < COIN_COUNT; i++)
-	{
-		for (int j = 0; j < COIN_COUNT; j++)
-		{
-			_coin[i][j].setTexture(_textureCoin);
-			_coin[i][j].setPosition(100.f + 130.f * (j + 1), BLOCK_SPACE * (i + 1) + 50.f);
-
-			std::shared_ptr<Coin> se = std::make_shared<Coin>();
-			se->m_sprite = _coin[i][j];
-			se->m_size = _textureCoin.getSize();
-			se->m_position = _coin[i][j].getPosition();
-			if(!se->CollidesLadder())
-				EntityManager::m_Coins.push_back(se);
-		}
-	}
-
-	// Draw enemies
-
-	_textureEnemy.loadFromFile("Media/Textures/enemy_1_right.png");
-
-	for (int i = 0; i < LADDER_COUNT; i++)
-	{
-		_enemy[i].setTexture(_textureEnemy);
-		_enemy[i].setPosition(100.f + 90.f * (i + 1), BLOCK_SPACE * (i + 1) + 78.f);
-
-		std::shared_ptr<Enemy> se = std::make_shared<Enemy>();
-		se->m_sprite = _enemy[i];
-		se->m_size = _textureEnemy.getSize();
-		se->m_position = _enemy[i].getPosition();
-		EntityManager::m_Enemies.push_back(se);
-	}
-
-	// Draw Peach
-	mPeachTexture.loadFromFile("Media/Textures/peach.png");
-	mPeach.setTexture(mPeachTexture);
-	mPeach.setPosition(600.f, 55.f);
-
-	// Draw Mario
-
-	mTexture.loadFromFile("Media/Textures/mario_right.png"); // Mario_small.png");
-	_sizeMario = mTexture.getSize();
-	mPlayer.setTexture(mTexture);
-	sf::Vector2f posMario;
-	posMario.x = 100.f + 70.f;
-	posMario.y = BLOCK_SPACE * 5 - _sizeMario.y;
-
-	mPlayer.setPosition(posMario);
-
-	std::shared_ptr<Player> player = std::make_shared<Player>();
-	player->m_sprite = mPlayer;
-	player->m_size = mTexture.getSize();
-	player->m_position = mPlayer.getPosition();
-	EntityManager::m_Player = player;
-
-	// Draw Statistic Font 
-
+	// Draw Statistic Font
 	mFont.loadFromFile("Media/Sansation.ttf");
 	mStatisticsText.setString("Welcome to Donkey Kong 1981");
 	mStatisticsText.setFont(mFont);
@@ -129,10 +31,10 @@ Game::Game()
 	// Draw end game text
 	mEndGameText.setFont(mFont);
 	mEndGameText.setPosition(280.f, 10.f);
-	mEndGameText.setCharacterSize(50);
+	mEndGameText.setCharacterSize(45);
 	mEndGameText.setStyle(sf::Text::Bold);
 	mEndGameText.setFillColor(sf::Color::Red);
-	
+
 }
 
 void Game::run()
@@ -194,26 +96,57 @@ void Game::handlePlayerInput(sf::Keyboard::Key key, bool isPressed)
 		if(cptFall == 25)
 			mIsJumping = true;
 	}
+	else if (key == sf::Keyboard::Enter)
+		mEnterIsPressed = isPressed;
 }
 
 void Game::update(sf::Time elapsedTime)
 {
-	if (mIsMovingUp)
-		EntityManager::m_Player->GoUp(elapsedTime);
-	if (mIsMovingDown)
-		EntityManager::m_Player->GoDown(elapsedTime);
-	if (mIsMovingLeft)
-		EntityManager::m_Player->GoLeft(elapsedTime);
-	if (mIsMovingRight)
-		EntityManager::m_Player->GoRight(elapsedTime);
-	if (mIsJumping){
-		EntityManager::m_Player->Jump(elapsedTime);
-	}
-	EntityManager::m_Player->TryToEatCoin();
-
-	for (std::shared_ptr<Enemy> enemy : EntityManager::m_Enemies)
+	switch(mGameState)
 	{
-		enemy->Move(elapsedTime);
+
+	case GameState::Running:
+		if (mIsMovingUp)
+		{
+			mLevelFactory.GetLevel()->mPlayer->GoUp(elapsedTime);
+		}
+
+		if (mIsMovingDown)
+			mLevelFactory.GetLevel()->mPlayer->GoDown(elapsedTime);
+
+		if (mIsMovingLeft)
+		{
+			mLevelFactory.GetLevel()->mPlayer->GoLeft(elapsedTime);
+		}
+
+		if (mIsMovingRight)
+		{
+			mLevelFactory.GetLevel()->mPlayer->GoRight(elapsedTime);
+		}
+
+		mLevelFactory.GetLevel()->mPlayer->TryToEatCoin();
+
+		for (std::shared_ptr<Enemy> enemy : mLevelFactory.GetLevel()->mEnemies)
+			enemy->Move(elapsedTime);
+
+		break;
+
+	case GameState::End:
+		for (std::shared_ptr<Enemy> enemy : mLevelFactory.GetLevel()->mEnemies)
+			enemy->Move(elapsedTime);
+
+		if (mEnterIsPressed)
+		{
+			if (mLevelFactory.GetLevel()->IsWon)
+				mLevelFactory.LevelUp();
+			else
+				mLevelFactory.Retry();
+
+			mEndGameText.setString("");
+			mGameState = GameState::Running;
+		}
+
+		break;
 	}
 }
 
@@ -221,34 +154,33 @@ void Game::render()
 {
 	mWindow.clear();
 
-	for (std::shared_ptr<Entity> entity : EntityManager::m_Blocks)
+	for (std::shared_ptr<Entity> entity : mLevelFactory.GetLevel()->mBlocks)
 	{
 		if (entity->m_enabled)
 			mWindow.draw(entity->m_sprite);
 	}
 
-	for (std::shared_ptr<Entity> entity : EntityManager::m_Ladders)
+	for (std::shared_ptr<Entity> entity : mLevelFactory.GetLevel()->mLadders)
 	{
 		if (entity->m_enabled)
 			mWindow.draw(entity->m_sprite);
 	}
 
-	for (std::shared_ptr<Entity> entity : EntityManager::m_Coins)
+	for (std::shared_ptr<Entity> entity : mLevelFactory.GetLevel()->mCoins)
 	{
 		if (entity->m_enabled)
 			mWindow.draw(entity->m_sprite);
 	}
 
-	for (std::shared_ptr<Entity> entity : EntityManager::m_Enemies)
+	for (std::shared_ptr<Entity> entity : mLevelFactory.GetLevel()->mEnemies)
 	{
 		if (entity->m_enabled)
 			mWindow.draw(entity->m_sprite);
 	}
 
-	mWindow.draw(EntityManager::m_Player->m_sprite);
-	mWindow.draw(Game::mPeach);
+	mWindow.draw(mLevelFactory.GetLevel()->mPlayer->m_sprite);
+	mWindow.draw(mLevelFactory.GetLevel()->mPeach->m_sprite);
 
-	
 	mWindow.draw(mStatisticsText);
 	mWindow.draw(mEndGameText);
 
@@ -257,13 +189,16 @@ void Game::render()
 
 void Game::watchMario()
 {
-	std::cout << "cptJump : " << cptJump << std::endl;
-	std::cout << "cptFall : " << cptFall << std::endl;
-	std::shared_ptr<Player> mario = EntityManager::m_Player;
+	std::shared_ptr<Player> mario = mLevelFactory.GetLevel()->mPlayer;
 	if (mario->HasEatenAllCoins())
-		this->IsWon();
-	if (mario->HasCollidedEnemy())
-		this->IsOver();
+	{
+		mario->Wins();
+		this->IsOver(1);
+	}
+	if (mario->HasCollidedEnemy()){
+		mario->Dies();
+		this->IsOver(0);
+	}
 	if ((mario->OnVoid() && !mIsJumping) || (mario->IsOnLadder() && !mIsJumping && cptFall != 25))
 		mario->GoDown(sf::microseconds(10000));
 	if (mario->IsOutsideOfWindow())
@@ -290,7 +225,7 @@ void Game::updateStatistics(sf::Time elapsedTime)
 		mStatisticsText.setString(
 			"Frames / Second = " + toString(mStatisticsNumFrames) + "\n" +
 			"Time / Update = " + toString(mStatisticsUpdateTime.asMicroseconds() / mStatisticsNumFrames) + "us\n" +
-			toString(EntityManager::GetCoinsEaten()) + "/" + toString(EntityManager::m_Coins.size()) + " coins"
+			toString(mLevelFactory.GetLevel()->GetCoinsEaten()) + "/" + toString(mLevelFactory.GetLevel()->mCoins.size()) + " coins"
 		);
 
 		mStatisticsUpdateTime -= sf::seconds(1.0f);
@@ -300,22 +235,20 @@ void Game::updateStatistics(sf::Time elapsedTime)
 
 	if (mStatisticsUpdateTime >= sf::seconds(0.050f))
 	{
-		
+
 	}
 }
 
-void Game::IsWon()
+void Game::IsOver(int state)
 {
-	IsFinished = true; 
-	mEndGameText.setString("YOU WON !");
-	
+	mGameState = GameState::End;
+	if (state == 0)
+	{
+		mEndGameText.setString("GAME OVER !\nRetry?");
+	}
+	else
+	{
+		mLevelFactory.GetLevel()->IsWon = true;
+		mEndGameText.setString("YOU WON !\nEnter for next level");
+	}
 }
-
-void Game::IsOver()
-{
-	IsFinished = true;
-	mEndGameText.setString("GAME OVER !");
-}
-
-
-

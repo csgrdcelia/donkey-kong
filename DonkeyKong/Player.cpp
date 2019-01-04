@@ -1,13 +1,16 @@
 #include "pch.h"
 #include "Player.h"
-#include "EntityManager.h"
+#include "LevelFactory.h"
 
 
-Player::Player()
+Player::Player(float x, float y) : Entity(x, y)
 {
-	Speed = 150.f;
-}
+	m_speed = 150.f;
 
+	m_texture.loadFromFile("Media/Textures/mario_right.png");
+	m_sprite.setTexture(m_texture);
+	m_sprite.setPosition(x, y);
+}
 
 Player::~Player()
 {
@@ -18,7 +21,7 @@ bool Player::GoDown(sf::Time elapsedTime)
 	if (this->IsAboveOrOnLadder() || OnVoid())
 	{
 		sf::Vector2f movement(0.f, 0.f);
-		movement.y += Speed*0.7;
+		movement.y += m_speed;
 		this->m_sprite.move(movement * elapsedTime.asSeconds());
 		return true;
 	}
@@ -28,7 +31,7 @@ bool Player::GoDown(sf::Time elapsedTime)
 
 void Player::TryToEatCoin()
 {
-	for (std::shared_ptr<Entity> entity : EntityManager::m_Coins)
+	for (std::shared_ptr<Entity> entity : LevelFactory::GetLevel()->mCoins)
 	{
 		sf::FloatRect fr = entity->m_sprite.getGlobalBounds();
 		if (this->m_sprite.getGlobalBounds().intersects(fr))
@@ -41,7 +44,7 @@ void Player::TryToEatCoin()
 
 bool Player::HasEatenAllCoins()
 {
-	if (EntityManager::GetCoinsEaten() == EntityManager::m_Coins.size())
+	if (LevelFactory::GetLevel()->GetCoinsEaten() == LevelFactory::GetLevel()->mCoins.size())
 	{
 		return true;
 	}
@@ -50,7 +53,7 @@ bool Player::HasEatenAllCoins()
 
 bool Player::HasCollidedEnemy()
 {
-	for (std::shared_ptr<Entity> entity : EntityManager::m_Enemies)
+	for (std::shared_ptr<Entity> entity : LevelFactory::GetLevel()->mEnemies)
 	{
 		sf::FloatRect fr = entity->m_sprite.getGlobalBounds();
 		if (this->m_sprite.getGlobalBounds().intersects(fr))
@@ -61,11 +64,46 @@ bool Player::HasCollidedEnemy()
 	return false;
 }
 
+void Player::GoLeft(sf::Time elapsedTime)
+{
+	m_texture.loadFromFile(m_leftTexturePath);
+	m_sprite.setTexture(m_texture);
+	Entity::GoLeft(elapsedTime);
+}
 
-void Player::Jump(sf::Time elapsedTime){
-	if(!this->CollidesBlock()){
-		sf::Vector2f movement(0.f, 0.f);
-		movement.y -= Speed*1.3;
-		this->m_sprite.move(movement * elapsedTime.asSeconds());
+void Player::GoRight(sf::Time elapsedTime)
+{
+	m_texture.loadFromFile(m_rightTexturePath);
+	m_sprite.setTexture(m_texture);
+	Entity::GoRight(elapsedTime);
+}
+
+bool Player::GoUp(sf::Time elapsedTime)
+{
+	m_texture.loadFromFile(m_upTexturePath);
+	m_sprite.setTexture(m_texture);
+	return Entity::GoUp(elapsedTime); 
+}
+
+void Player::Dies()
+{	
+	if (mDiesBuffer.loadFromFile(m_deathSoundPath))
+	{
+		mDeathSound.setBuffer(mDiesBuffer);
+		mDeathSound.play();
+		mDeathSound.setPlayingOffset(sf::seconds(2.f));
 	}
 }
+
+void Player::Wins()
+{
+	if (mWinsBuffer.loadFromFile(m_win1SoundPath))
+	{
+		mWin1Sound.setBuffer(mWinsBuffer);
+		mWin1Sound.play();
+		mWin1Sound.setPlayingOffset(sf::seconds(2.f));
+	}
+}
+
+
+

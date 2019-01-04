@@ -1,14 +1,35 @@
 #include "pch.h"
 #include "Entity.h"
+<<<<<<< HEAD
 #include "EntityManager.h"
 #include "Game.h"
+=======
+#include "LevelFactory.h"
+
+Entity::Entity()
+{
+}
+
+Entity::Entity(float x, float y)
+{
+	
+}
+
+Entity::Entity(float x, float y, std::string pathToPNG)
+{
+	m_texture.loadFromFile(pathToPNG);
+	m_sprite.setTexture(m_texture);
+	m_sprite.setPosition(x, y);
+}
+
+>>>>>>> origin/dev
 
 void Entity::GoRight(sf::Time elapsedTime)
 {
 	if (!CollidesBlock()) 
 	{
 		sf::Vector2f movement(0.f, 0.f);
-		movement.x += Speed;
+		movement.x += m_speed;
 		this->m_sprite.move(movement * elapsedTime.asSeconds());
 
 			/*while (CollidesBlock())
@@ -22,7 +43,7 @@ void Entity::GoLeft(sf::Time elapsedTime)
 	if (!CollidesBlock()) 
 	{
 		sf::Vector2f movement(0.f, 0.f);
-		movement.x -= Speed;
+		movement.x -= m_speed;
 		this->m_sprite.move(movement * elapsedTime.asSeconds());
 
 			/*while (CollidesBlock())
@@ -36,7 +57,7 @@ bool Entity::GoUp(sf::Time elapsedTime)
 	if (this->IsOnLadder())
 	{
 		sf::Vector2f movement(0.f, 0.f);
-		movement.y -= Speed;
+		movement.y -= m_speed;
 		this->m_sprite.move(movement * elapsedTime.asSeconds());
 		return true;
 	}
@@ -48,7 +69,7 @@ bool Entity::GoDown(sf::Time elapsedTime)
 	if (this->IsAboveOrOnLadder())
 	{
 		sf::Vector2f movement(0.f, 0.f);
-		movement.y += Speed;
+		movement.y += m_speed;
 		this->m_sprite.move(movement * elapsedTime.asSeconds());
 		return true;
 	}
@@ -57,7 +78,7 @@ bool Entity::GoDown(sf::Time elapsedTime)
 
 bool Entity::IsOnLadder()
 {
-	for (std::shared_ptr<Entity> entity : EntityManager::m_Ladders)
+	for (std::shared_ptr<Entity> entity : LevelFactory::GetLevel()->mLadders)
 	{
 		sf::FloatRect fr = entity->m_sprite.getGlobalBounds();
 		// we add the height of the block texture so our entity can hike on it
@@ -77,10 +98,10 @@ bool Entity::IsOnLadder()
 
 bool Entity::IsAboveOrOnLadder()
 {
-	for (std::shared_ptr<Entity> entity : EntityManager::m_Ladders)
+	for (std::shared_ptr<Entity> entity : LevelFactory::GetLevel()->mLadders)
 	{
 		sf::FloatRect fr = entity->m_sprite.getGlobalBounds();
-		fr.top -= this->m_size.y + 10;
+		fr.top -= this->m_sprite.getTexture()->getSize().y + 10;
 		fr.height += 13;
 		if (this->m_sprite.getGlobalBounds().intersects(fr))
 		{
@@ -91,7 +112,7 @@ bool Entity::IsAboveOrOnLadder()
 }
 
 bool Entity::CollidesBlock() {
-	for (std::shared_ptr<Entity> entity : EntityManager::m_Blocks)
+	for (std::shared_ptr<Entity> entity : LevelFactory::GetLevel()->mBlocks)
 	{
 		if (this->m_sprite.getGlobalBounds().intersects(entity->m_sprite.getGlobalBounds()))
 		{
@@ -104,7 +125,7 @@ bool Entity::CollidesBlock() {
 bool Entity::OnVoid()
 {
 	bool OnEdge = true;
-	for (std::shared_ptr<Entity> entity : EntityManager::m_Blocks)
+	for (std::shared_ptr<Entity> entity : LevelFactory::GetLevel()->mBlocks)
 	{
 		sf::FloatRect fr = entity->m_sprite.getGlobalBounds();
 		fr.top -= 5; 
@@ -122,3 +143,4 @@ bool Entity::IsOutsideOfWindow()
 		return true;
 	return false;
 }
+

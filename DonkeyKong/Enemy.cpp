@@ -1,12 +1,19 @@
 #include "pch.h"
 #include "Enemy.h"
-#include "EntityManager.h"
 
 
 
 Enemy::Enemy()
 {
-	Speed = 100.f;
+}
+
+Enemy::Enemy(float x, float y) : Entity(x, y)
+{
+	m_speed = 100.f;
+
+	m_texture.loadFromFile("Media/Textures/enemy_1_right.png");
+	m_sprite.setTexture(m_texture);
+	m_sprite.setPosition(x, y);
 }
 
 Enemy::~Enemy()
@@ -54,9 +61,13 @@ void Enemy::GoLeftOrRight(sf::Time elapsedTime)
 {
 	ChangeSideIfOnEdge();
 	if (GoesToTheRight)
+	{
 		GoRight(elapsedTime);
+	}
 	else
+	{
 		GoLeft(elapsedTime);
+	}
 }
 
 void Enemy::ChangeSideIfOnEdge()
@@ -68,4 +79,18 @@ void Enemy::ChangeSideIfOnEdge()
 		else
 			Enemy::GoesToTheRight = true;
 	}
+}
+
+void Enemy::GoLeft(sf::Time elapsedTime)
+{
+	m_texture.loadFromFile(m_leftTexturePath);
+	m_sprite.setTexture(m_texture);
+	Entity::GoLeft(elapsedTime);
+}
+
+void Enemy::GoRight(sf::Time elapsedTime)
+{
+	m_texture.loadFromFile(m_rightTexturePath);
+	m_sprite.setTexture(m_texture);
+	Entity::GoRight(elapsedTime);
 }

@@ -1,12 +1,20 @@
 #pragma once
 
-#define LADDER_COUNT 4
-#define BLOCK_COUNT_X 8
-#define BLOCK_COUNT_Y 5
+//#define LADDER_COUNT 4
+//#define BLOCK_COUNT_X 8
+//#define BLOCK_COUNT_Y 5
 #define BLOCK_SPACE 110.f
-#define COIN_COUNT 4
+//#define COIN_COUNT 4
 #define COIN_SPACE 120.f
 #define ENEMY_COUNT 4
+#include "LevelFactory.h"
+#include <SFML/Audio.hpp>
+
+enum GameState
+{
+	Running,
+	End
+};
 
 class Game
 {
@@ -23,19 +31,14 @@ private:
 
 	void updateStatistics(sf::Time elapsedTime);
 	void handlePlayerInput(sf::Keyboard::Key key, bool isPressed);
-	void IsOver();
-	void IsWon();
+	void IsOver(int state);
 
 private:
-	static const float		PlayerSpeed;
-	static const float		EnemySpeed;
 	static const sf::Time	TimePerFrame;
-
-	bool IsFinished;
+	GameState		mGameState = GameState::Running;
+	LevelFactory	mLevelFactory;
 
 	sf::RenderWindow		mWindow;
-	sf::Texture	mTexture;
-	sf::Sprite	mPlayer;
 	sf::Font	mFont;
 	sf::Text	mStatisticsText;
 	sf::Time	mStatisticsUpdateTime;
@@ -44,6 +47,7 @@ private:
 	sf::Texture mPeachTexture;
 
 	std::size_t	mStatisticsNumFrames;
+
 	bool mIsMovingUp;
 	bool mIsMovingDown;
 	bool mIsMovingRight;
@@ -51,18 +55,5 @@ private:
 	bool mIsJumping;
 	int cptJump = 0;
 	int cptFall = 25;
-
-	sf::Texture	_TextureEchelle;
-	sf::Sprite	_Echelle[LADDER_COUNT];
-	sf::Texture	_TextureBlock;
-	sf::Sprite	_Block[BLOCK_COUNT_X][BLOCK_COUNT_Y];
-	sf::Texture	_TextureWeapon;
-	sf::Sprite	_Weapon;
-	sf::Vector2u _sizeBlock;
-	sf::Vector2u _sizeMario;
-	sf::Texture _textureCoin;
-	sf::Sprite _coin[COIN_COUNT][COIN_COUNT];
-	sf::Texture _textureEnemy;
-	sf::Sprite _enemy[ENEMY_COUNT];
+	bool mEnterIsPressed;
 };
-

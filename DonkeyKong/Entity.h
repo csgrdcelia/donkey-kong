@@ -3,14 +3,20 @@
 
 class Entity
 {
+
+protected:
+	Entity();
+	Entity(float x, float y);
 public:
-	Entity() { };
-	~Entity() { };
+	Entity(float x, float y, std::string pathToPNG);
 
 public:
-	void GoRight(sf::Time elapsedTime);
-	void GoLeft(sf::Time elapsedTime);
-	bool GoUp(sf::Time elapsedTime);
+	virtual ~Entity() { };
+
+public:
+	virtual void GoRight(sf::Time elapsedTime);
+	virtual void GoLeft(sf::Time elapsedTime);
+	virtual bool GoUp(sf::Time elapsedTime);
 	bool GoDown(sf::Time elapsedTime);
 	bool IsOnLadder();		
 	bool IsAboveOrOnLadder();
@@ -20,14 +26,12 @@ public:
 
 public:
 	sf::Sprite m_sprite;
-	sf::Vector2u m_size;
-	sf::Vector2f m_position;
 	bool m_enabled = true;
-
-	// Enemy only
-	bool m_bLeftToRight = true;
 	int m_times = 0;
 
+protected:
+	sf::Texture m_texture;
+
 public:
-	float	Speed;
+	float	m_speed;
 };
