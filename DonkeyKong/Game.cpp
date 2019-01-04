@@ -190,8 +190,9 @@ void Game::handlePlayerInput(sf::Keyboard::Key key, bool isPressed)
 	else if (key == sf::Keyboard::Right)
 		mIsMovingRight = isPressed;
 	if (key == sf::Keyboard::Space) {
-		mIsJumping = true;
 		mWindow.setKeyRepeatEnabled(false);
+		if(cptFall == 25)
+			mIsJumping = true;
 	}
 }
 
@@ -277,7 +278,6 @@ void Game::watchMario()
 		cptJump++;
 		cptFall--;
 	}
-
 }
 
 void Game::updateStatistics(sf::Time elapsedTime)
