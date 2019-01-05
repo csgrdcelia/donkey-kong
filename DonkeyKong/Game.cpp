@@ -190,9 +190,15 @@ void Game::watchMario()
 {
 	std::shared_ptr<Player> mario = mLevelFactory.GetLevel()->mPlayer;
 	if (mario->HasEatenAllCoins())
+	{
+		mario->Wins();
 		this->IsOver(1);
+	}
 	if (mario->HasCollidedEnemy())
+	{
+		mario->Dies();
 		this->IsOver(0);
+	}
 	if (mario->OnVoid())
 		mario->GoDown(sf::microseconds(10000));
 	if (mario->IsOutsideOfWindow())

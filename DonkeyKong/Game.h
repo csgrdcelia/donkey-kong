@@ -8,6 +8,7 @@
 #define COIN_SPACE 120.f
 #define ENEMY_COUNT 4
 #include "LevelFactory.h"
+#include <SFML/Audio.hpp>
 
 enum GameState
 {
