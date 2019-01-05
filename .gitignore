@@ -4,5 +4,5 @@ Debug/
 DonkeyKong.sln
 DonkeyKong/Debug/
 DonkeyKong/x64/
-*.vcxproj
+*.vcxproj*
 a.out
