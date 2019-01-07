@@ -8,9 +8,9 @@ Block::Block()
 
 Block::Block(float x, float y) : Entity(x, y)
 {
-	m_texture.loadFromFile("Media/Textures/Block.png");
-	m_sprite.setTexture(m_texture);
-	m_sprite.setPosition(x, y);
+	mTexture.loadFromFile("Media/Textures/Block.png");
+	mSprite.setTexture(mTexture);
+	mSprite.setPosition(x, y);
 }
 
 

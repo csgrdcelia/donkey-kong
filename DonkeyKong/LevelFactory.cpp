@@ -74,7 +74,7 @@ void LevelFactory::PopulateLevelMap()
 	// Enemies
 	for (int i = 0; i < 4; i++)
 	{
-		std::shared_ptr<Enemy> se = std::make_shared<Enemy>(100.f + 90.f * (i + 1), 110.f * (i + 1) + 78.f);
+		std::shared_ptr<Enemy> se = std::make_shared<Enemy>(100.f + 90.f * (i + 1), 110.f * (i + 1) + 80.f);
 		level1->mEnemies.push_back(se);
 	}
 
@@ -115,7 +115,7 @@ void LevelFactory::PopulateLevelMap()
 	// Enemies
 	for (int i = 0; i < 4; i++)
 	{
-		std::shared_ptr<Enemy> se = std::make_shared<Enemy>(100.f + 90.f * (i + 1), 110.f * (i + 1) + 78.f);
+		std::shared_ptr<Enemy> se = std::make_shared<Enemy>(100.f + 90.f * (i + 1), 110.f * (i + 1) + 80.f);
 		level2->mEnemies.push_back(se);
 	}
 }	

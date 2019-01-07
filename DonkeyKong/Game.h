@@ -1,10 +1,6 @@
 #pragma once
 
-//#define LADDER_COUNT 4
-//#define BLOCK_COUNT_X 8
-//#define BLOCK_COUNT_Y 5
 #define BLOCK_SPACE 110.f
-//#define COIN_COUNT 4
 #define COIN_SPACE 120.f
 #define ENEMY_COUNT 4
 #include "LevelFactory.h"

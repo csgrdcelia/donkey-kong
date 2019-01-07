@@ -7,9 +7,8 @@ Player::Player(float x, float y) : Entity(x, y)
 {
 	m_speed = 150.f;
 
-	m_texture.loadFromFile("Media/Textures/mario_right.png");
-	m_sprite.setTexture(m_texture);
-	m_sprite.setPosition(x, y);
+	UpdateTexture("Media/Textures/mario_right.png");
+	mSprite.setPosition(x, y);
 }
 
 Player::~Player()
@@ -18,33 +17,22 @@ Player::~Player()
 
 void Player::Jump(sf::Time elapsedTime) {
 	if (!this->IsOnLadder()) {
+		GoesToTheRight ? UpdateTexture(mRightJumpTexturePath) : UpdateTexture(mLeftJumpTexturePath);
+
 		sf::Vector2f movement(0.f, 0.f);
 		movement.y -= m_speed;
-		this->m_sprite.move(movement * elapsedTime.asSeconds());
+		this->mSprite.move(movement * elapsedTime.asSeconds());
 	}
-}
-
-bool Player::GoDown(sf::Time elapsedTime)
-{
-	if (this->IsAboveOrOnLadder() || OnVoid())
-	{
-		sf::Vector2f movement(0.f, 0.f);
-		movement.y += m_speed;
-		this->m_sprite.move(movement * elapsedTime.asSeconds());
-		return true;
-	}
-	return false;
-
 }
 
 void Player::TryToEatCoin()
 {
 	for (std::shared_ptr<Entity> entity : LevelFactory::GetLevel()->mCoins)
 	{
-		sf::FloatRect fr = entity->m_sprite.getGlobalBounds();
-		if (this->m_sprite.getGlobalBounds().intersects(fr))
+		sf::FloatRect fr = entity->mSprite.getGlobalBounds();
+		if (this->mSprite.getGlobalBounds().intersects(fr))
 		{
-			entity->m_enabled = false;
+			entity->mEnabled = false;
 			break;
 		}
 	}
@@ -63,8 +51,8 @@ bool Player::HasCollidedEnemy()
 {
 	for (std::shared_ptr<Entity> entity : LevelFactory::GetLevel()->mEnemies)
 	{
-		sf::FloatRect fr = entity->m_sprite.getGlobalBounds();
-		if (this->m_sprite.getGlobalBounds().intersects(fr))
+		sf::FloatRect fr = entity->mSprite.getGlobalBounds();
+		if (this->mSprite.getGlobalBounds().intersects(fr))
 		{
 			return true;
 		}
@@ -74,28 +62,41 @@ bool Player::HasCollidedEnemy()
 
 void Player::GoLeft(sf::Time elapsedTime)
 {
-	m_texture.loadFromFile(m_leftTexturePath);
-	m_sprite.setTexture(m_texture);
+	UpdateTexture(mleftTexturePath);
 	Entity::GoLeft(elapsedTime);
 }
 
 void Player::GoRight(sf::Time elapsedTime)
 {
-	m_texture.loadFromFile(m_rightTexturePath);
-	m_sprite.setTexture(m_texture);
+	UpdateTexture(mRightTexturePath);
 	Entity::GoRight(elapsedTime);
 }
 
 bool Player::GoUp(sf::Time elapsedTime)
 {
-	m_texture.loadFromFile(m_upTexturePath);
-	m_sprite.setTexture(m_texture);
+	if(IsAboveOrOnLadder())
+		UpdateTexture(mUpTexturePath);
 	return Entity::GoUp(elapsedTime); 
+}
+
+bool Player::GoDown(sf::Time elapsedTime)
+{
+	if (this->IsAboveOrOnLadder() || OnVoid())
+	{
+		if (IsOnLadder()) 
+			UpdateTexture(mUpTexturePath);
+
+		sf::Vector2f movement(0.f, 0.f);
+		movement.y += 50.f;
+		this->mSprite.move(movement * elapsedTime.asSeconds());
+		return true;
+	}
+	return false;
 }
 
 void Player::Dies()
 {	
-	if (mDiesBuffer.loadFromFile(m_deathSoundPath))
+	if (mDiesBuffer.loadFromFile(mDeathSoundPath))
 	{
 		mDeathSound.setBuffer(mDiesBuffer);
 		mDeathSound.play();
@@ -105,7 +106,7 @@ void Player::Dies()
 
 void Player::Wins()
 {
-	if (mWinsBuffer.loadFromFile(m_win1SoundPath))
+	if (mWinsBuffer.loadFromFile(mWin1SoundPath))
 	{
 		mWin1Sound.setBuffer(mWinsBuffer);
 		mWin1Sound.play();

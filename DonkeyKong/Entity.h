@@ -17,6 +17,7 @@ public:
 	virtual void GoRight(sf::Time elapsedTime);
 	virtual void GoLeft(sf::Time elapsedTime);
 	virtual bool GoUp(sf::Time elapsedTime);
+	virtual void UpdateTexture(std::string path);
 	bool GoDown(sf::Time elapsedTime);
 	bool IsOnLadder();		
 	bool IsAboveOrOnLadder();
@@ -25,12 +26,13 @@ public:
 	bool IsOutsideOfWindow();
 
 public:
-	sf::Sprite m_sprite;
-	bool m_enabled = true;
-	int m_times = 0;
+	bool GoesToTheRight = true;
+	sf::Sprite mSprite;
+	bool mEnabled = true;
+	int mTimes = 0;
 
 protected:
-	sf::Texture m_texture;
+	sf::Texture mTexture;
 
 public:
 	float	m_speed;

@@ -11,9 +11,8 @@ Enemy::Enemy(float x, float y) : Entity(x, y)
 {
 	m_speed = 100.f;
 
-	m_texture.loadFromFile("Media/Textures/enemy_1_right.png");
-	m_sprite.setTexture(m_texture);
-	m_sprite.setPosition(x, y);
+	UpdateTexture("Media/Textures/enemy_1_right.png");
+	mSprite.setPosition(x, y);
 }
 
 Enemy::~Enemy()
@@ -59,38 +58,32 @@ void Enemy::Move(sf::Time elapsedTime)
 
 void Enemy::GoLeftOrRight(sf::Time elapsedTime)
 {
-	ChangeSideIfOnEdge();
+	ChangeSideIfOnEdge(elapsedTime);
 	if (GoesToTheRight)
-	{
 		GoRight(elapsedTime);
-	}
 	else
-	{
 		GoLeft(elapsedTime);
-	}
 }
 
-void Enemy::ChangeSideIfOnEdge()
+void Enemy::ChangeSideIfOnEdge(sf::Time elapsedTime)
 {
 	if (OnVoid())
 	{
 		if (Enemy::GoesToTheRight)
-			Enemy::GoesToTheRight = false;
+			GoLeft(elapsedTime);
 		else
-			Enemy::GoesToTheRight = true;
+			GoRight(elapsedTime);
 	}
 }
 
 void Enemy::GoLeft(sf::Time elapsedTime)
 {
-	m_texture.loadFromFile(m_leftTexturePath);
-	m_sprite.setTexture(m_texture);
+	UpdateTexture(mLeftTexturePath);
 	Entity::GoLeft(elapsedTime);
 }
 
 void Enemy::GoRight(sf::Time elapsedTime)
 {
-	m_texture.loadFromFile(m_rightTexturePath);
-	m_sprite.setTexture(m_texture);
+	UpdateTexture(mRightTexturePath);
 	Entity::GoRight(elapsedTime);
 }

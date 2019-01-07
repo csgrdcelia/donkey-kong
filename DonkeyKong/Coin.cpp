@@ -9,9 +9,8 @@ Coin::Coin()
 
 Coin::Coin(float x, float y) : Entity(x, y)
 {
-	m_texture.loadFromFile("Media/Textures/coin.png");
-	m_sprite.setTexture(m_texture);
-	m_sprite.setPosition(x, y);
+	UpdateTexture("Media/Textures/coin.png");
+	mSprite.setPosition(x, y);
 }
 
 
@@ -23,9 +22,9 @@ bool Coin::CollidesLadder(std::vector<std::shared_ptr<Ladder>> mLadders)
 {
 	for (std::shared_ptr<Entity> entity : mLadders)
 	{
-		sf::FloatRect fr = entity->m_sprite.getGlobalBounds();
+		sf::FloatRect fr = entity->mSprite.getGlobalBounds();
 		fr.top -= 30; // so Mario can continue to hike when he's on the block
-		if (this->m_sprite.getGlobalBounds().intersects(fr))
+		if (this->mSprite.getGlobalBounds().intersects(fr))
 		{
 			return true;
 			break;

@@ -107,26 +107,19 @@ void Game::update(sf::Time elapsedTime)
 
 	case GameState::Running:
 		if (mIsMovingUp)
-		{
 			mLevelFactory.GetLevel()->mPlayer->GoUp(elapsedTime);
-		}
-
+		
 		if (mIsMovingDown)
 			mLevelFactory.GetLevel()->mPlayer->GoDown(elapsedTime);
 
 		if (mIsMovingLeft)
-		{
 			mLevelFactory.GetLevel()->mPlayer->GoLeft(elapsedTime);
-		}
 
 		if (mIsMovingRight)
-		{
 			mLevelFactory.GetLevel()->mPlayer->GoRight(elapsedTime);
-		}
 
-		if (mIsJumping) {
+		if (mIsJumping)
 			mLevelFactory.GetLevel()->mPlayer->Jump(elapsedTime);
-		}
 
 		mLevelFactory.GetLevel()->mPlayer->TryToEatCoin();
 
@@ -160,30 +153,30 @@ void Game::render()
 
 	for (std::shared_ptr<Entity> entity : mLevelFactory.GetLevel()->mBlocks)
 	{
-		if (entity->m_enabled)
-			mWindow.draw(entity->m_sprite);
+		if (entity->mEnabled)
+			mWindow.draw(entity->mSprite);
 	}
 
 	for (std::shared_ptr<Entity> entity : mLevelFactory.GetLevel()->mLadders)
 	{
-		if (entity->m_enabled)
-			mWindow.draw(entity->m_sprite);
+		if (entity->mEnabled)
+			mWindow.draw(entity->mSprite);
 	}
 
 	for (std::shared_ptr<Entity> entity : mLevelFactory.GetLevel()->mCoins)
 	{
-		if (entity->m_enabled)
-			mWindow.draw(entity->m_sprite);
+		if (entity->mEnabled)
+			mWindow.draw(entity->mSprite);
 	}
 
 	for (std::shared_ptr<Entity> entity : mLevelFactory.GetLevel()->mEnemies)
 	{
-		if (entity->m_enabled)
-			mWindow.draw(entity->m_sprite);
+		if (entity->mEnabled)
+			mWindow.draw(entity->mSprite);
 	}
 
-	mWindow.draw(mLevelFactory.GetLevel()->mPlayer->m_sprite);
-	mWindow.draw(mLevelFactory.GetLevel()->mPeach->m_sprite);
+	mWindow.draw(mLevelFactory.GetLevel()->mPlayer->mSprite);
+	mWindow.draw(mLevelFactory.GetLevel()->mPeach->mSprite);
 
 	mWindow.draw(mStatisticsText);
 	mWindow.draw(mEndGameText);
