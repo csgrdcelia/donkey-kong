@@ -21,7 +21,7 @@ Game::Game()
 {
 	mWindow.setFramerateLimit(160);
 
-	// Draw Statistic Font 
+	// Draw Statistic Font
 	mFont.loadFromFile("Media/Sansation.ttf");
 	mStatisticsText.setString("Welcome to Donkey Kong 1981");
 	mStatisticsText.setFont(mFont);
@@ -34,7 +34,7 @@ Game::Game()
 	mEndGameText.setCharacterSize(45);
 	mEndGameText.setStyle(sf::Text::Bold);
 	mEndGameText.setFillColor(sf::Color::Red);
-	
+
 }
 
 void Game::run()
@@ -91,12 +91,13 @@ void Game::handlePlayerInput(sf::Keyboard::Key key, bool isPressed)
 		mIsMovingLeft = isPressed;
 	else if (key == sf::Keyboard::Right)
 		mIsMovingRight = isPressed;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+		mWindow.setKeyRepeatEnabled(false);
+		if(cptFall == 30)
+			mIsJumping = true;
+	}
 	else if (key == sf::Keyboard::Enter)
 		mEnterIsPressed = isPressed;
-
-	if (key == sf::Keyboard::Space)
-	{
-	}
 }
 
 void Game::update(sf::Time elapsedTime)
@@ -112,7 +113,7 @@ void Game::update(sf::Time elapsedTime)
 
 		if (mIsMovingDown)
 			mLevelFactory.GetLevel()->mPlayer->GoDown(elapsedTime);
-			
+
 		if (mIsMovingLeft)
 		{
 			mLevelFactory.GetLevel()->mPlayer->GoLeft(elapsedTime);
@@ -123,17 +124,21 @@ void Game::update(sf::Time elapsedTime)
 			mLevelFactory.GetLevel()->mPlayer->GoRight(elapsedTime);
 		}
 
+		if (mIsJumping) {
+			mLevelFactory.GetLevel()->mPlayer->Jump(elapsedTime);
+		}
+
 		mLevelFactory.GetLevel()->mPlayer->TryToEatCoin();
 
 		for (std::shared_ptr<Enemy> enemy : mLevelFactory.GetLevel()->mEnemies)
 			enemy->Move(elapsedTime);
-		
+
 		break;
 
 	case GameState::End:
 		for (std::shared_ptr<Enemy> enemy : mLevelFactory.GetLevel()->mEnemies)
 			enemy->Move(elapsedTime);
-		
+
 		if (mEnterIsPressed)
 		{
 			if (mLevelFactory.GetLevel()->IsWon)
@@ -194,15 +199,24 @@ void Game::watchMario()
 		mario->Wins();
 		this->IsOver(1);
 	}
-	if (mario->HasCollidedEnemy())
-	{
+	if (mario->HasCollidedEnemy()){
 		mario->Dies();
 		this->IsOver(0);
 	}
-	if (mario->OnVoid())
+	if ((mario->OnVoid() && !mIsJumping) || (mario->IsOnLadder() && !mIsJumping && cptFall != 30))
 		mario->GoDown(sf::microseconds(10000));
 	if (mario->IsOutsideOfWindow())
 		IsOver(0);
+	if (cptJump == 30)
+		mIsJumping = false;
+	if (!mIsJumping)
+		cptJump = 0;
+	if (!mIsJumping && cptFall != 30)
+		cptFall++;
+	if (mIsJumping) {
+		cptJump++;
+		cptFall--;
+	}
 }
 
 void Game::updateStatistics(sf::Time elapsedTime)
@@ -225,7 +239,7 @@ void Game::updateStatistics(sf::Time elapsedTime)
 
 	if (mStatisticsUpdateTime >= sf::seconds(0.050f))
 	{
-		
+
 	}
 }
 
@@ -242,7 +256,3 @@ void Game::IsOver(int state)
 		mEndGameText.setString("YOU WON !\nEnter for next level");
 	}
 }
-
-
-
-

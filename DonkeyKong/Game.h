@@ -52,6 +52,8 @@ private:
 	bool mIsMovingDown;
 	bool mIsMovingRight;
 	bool mIsMovingLeft;
+	bool mIsJumping;
+	int cptJump = 0;
+	int cptFall = 30;
 	bool mEnterIsPressed;
 };
-

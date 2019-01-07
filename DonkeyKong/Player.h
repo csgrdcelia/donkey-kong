@@ -17,7 +17,8 @@ public:
 	bool GoDown(sf::Time elapsedTime);
 	void GoLeft(sf::Time elapsedTime) override; 
 	void GoRight(sf::Time elapsedTime) override; 
-	bool GoUp(sf::Time elapsedTime) override; 
+	bool GoUp(sf::Time elapsedTime) override;
+	void Jump(sf::Time elapsedTime);
 	void Dies(); 
 	void Wins();
 

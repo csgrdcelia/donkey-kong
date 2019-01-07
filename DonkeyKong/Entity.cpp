@@ -8,7 +8,7 @@ Entity::Entity()
 
 Entity::Entity(float x, float y)
 {
-	
+
 }
 
 Entity::Entity(float x, float y, std::string pathToPNG)
@@ -21,7 +21,7 @@ Entity::Entity(float x, float y, std::string pathToPNG)
 
 void Entity::GoRight(sf::Time elapsedTime)
 {
-	if (!CollidesBlock()) 
+	if (!CollidesBlock())
 	{
 		sf::Vector2f movement(0.f, 0.f);
 		movement.x += m_speed;
@@ -35,7 +35,7 @@ void Entity::GoRight(sf::Time elapsedTime)
 
 void Entity::GoLeft(sf::Time elapsedTime)
 {
-	if (!CollidesBlock()) 
+	if (!CollidesBlock())
 	{
 		sf::Vector2f movement(0.f, 0.f);
 		movement.x -= m_speed;
@@ -77,7 +77,7 @@ bool Entity::IsOnLadder()
 	{
 		sf::FloatRect fr = entity->m_sprite.getGlobalBounds();
 		// we add the height of the block texture so our entity can hike on it
-		fr.top -= 33; 
+		fr.top -= 33;
 		fr.height += 33;
 		// we adjust the weight of the block so entities cannot go up if they intersect with only 1 pixel
 		fr.left += 13;
@@ -123,7 +123,7 @@ bool Entity::OnVoid()
 	for (std::shared_ptr<Entity> entity : LevelFactory::GetLevel()->mBlocks)
 	{
 		sf::FloatRect fr = entity->m_sprite.getGlobalBounds();
-		fr.top -= 5; 
+		fr.top -= 5;
 		fr.left += 5;
 		fr.width -= 10;
 		if (m_sprite.getGlobalBounds().intersects(fr))
@@ -138,4 +138,3 @@ bool Entity::IsOutsideOfWindow()
 		return true;
 	return false;
 }
-

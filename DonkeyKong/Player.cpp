@@ -16,6 +16,14 @@ Player::~Player()
 {
 }
 
+void Player::Jump(sf::Time elapsedTime) {
+	if (!this->IsOnLadder()) {
+		sf::Vector2f movement(0.f, 0.f);
+		movement.y -= m_speed;
+		this->m_sprite.move(movement * elapsedTime.asSeconds());
+	}
+}
+
 bool Player::GoDown(sf::Time elapsedTime)
 {
 	if (this->IsAboveOrOnLadder() || OnVoid())
