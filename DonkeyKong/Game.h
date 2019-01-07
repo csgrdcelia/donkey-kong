@@ -54,6 +54,6 @@ private:
 	bool mIsMovingLeft;
 	bool mIsJumping;
 	int cptJump = 0;
-	int cptFall = 25;
+	int cptFall = 30;
 	bool mEnterIsPressed;
 };
