@@ -91,12 +91,12 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>C:\Users\casag\Documents\SFML\include;C:\Code\Libraries\SFML\bin</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\casag\Documents\SFML\include;C:\Users\frichard\SFML\SFML-2.5.1\include;C:\Code\Libraries\SFML\bin</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Users\casag\Documents\SFML\lib;C:\Code\Libraries\SFML\bin</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\casag\Documents\SFML\lib;C:\Users\frichard\SFML\SFML-2.5.1\lib;C:\Code\Libraries\SFML\bin</AdditionalLibraryDirectories>
       <TargetMachine>MachineX64</TargetMachine>
     </Link>
   </ItemDefinitionGroup>
@@ -109,12 +109,12 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>C:\Code\Libraries\SFML\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Code\Libraries\SFML\include;C:\Users\frichard\SFML\SFML-2.5.1\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\Code\Libraries\SFML\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Code\Libraries\SFML\lib;C:\Users\frichard\SFML\SFML-2.5.1\lib</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

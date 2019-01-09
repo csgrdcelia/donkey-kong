@@ -93,8 +93,8 @@ void Game::handlePlayerInput(sf::Keyboard::Key key, bool isPressed)
 		mIsMovingRight = isPressed;
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
 		mWindow.setKeyRepeatEnabled(false);
-		if(cptFall == 30)
-			mIsJumping = true;
+		if(mLevelFactory.GetLevel()->mPlayer->cptFall == 30)
+			mLevelFactory.GetLevel()->mPlayer->mIsJumping = true;
 	}
 	else if (key == sf::Keyboard::Enter)
 		mEnterIsPressed = isPressed;
@@ -118,7 +118,7 @@ void Game::update(sf::Time elapsedTime)
 		if (mIsMovingRight)
 			mLevelFactory.GetLevel()->mPlayer->GoRight(elapsedTime);
 
-		if (mIsJumping)
+		if (mLevelFactory.GetLevel()->mPlayer->mIsJumping)
 			mLevelFactory.GetLevel()->mPlayer->Jump(elapsedTime);
 
 		mLevelFactory.GetLevel()->mPlayer->TryToEatCoin();
@@ -187,6 +187,7 @@ void Game::render()
 void Game::watchMario()
 {
 	std::shared_ptr<Player> mario = mLevelFactory.GetLevel()->mPlayer;
+	
 	if (mario->HasEatenAllCoins())
 	{
 		mario->Wins();
@@ -196,20 +197,11 @@ void Game::watchMario()
 		mario->Dies();
 		this->IsOver(0);
 	}
-	if ((mario->OnVoid() && !mIsJumping) || (mario->IsOnLadder() && !mIsJumping && cptFall != 30))
+	if ((mario->OnVoid() && !mario->mIsJumping && mario->cptFly == 0) || (mario->IsOnLadder() && !mario->mIsJumping && mario->cptFall != 30))
 		mario->GoDown(sf::microseconds(10000));
 	if (mario->IsOutsideOfWindow())
 		IsOver(0);
-	if (cptJump == 30)
-		mIsJumping = false;
-	if (!mIsJumping)
-		cptJump = 0;
-	if (!mIsJumping && cptFall != 30)
-		cptFall++;
-	if (mIsJumping) {
-		cptJump++;
-		cptFall--;
-	}
+	mario->GravityHandle();
 }
 
 void Game::updateStatistics(sf::Time elapsedTime)

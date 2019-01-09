@@ -25,6 +25,32 @@ void Player::Jump(sf::Time elapsedTime) {
 	}
 }
 
+void Player::GravityHandle() {
+	if (cptFall != 30) {
+		GoesToTheRight ? UpdateTexture(mRightJumpTexturePath) : UpdateTexture(mLeftJumpTexturePath);
+	}
+	if (cptFly > 0 && cptFly < 40) {
+		cptFly++;
+	}
+	else {
+		if (cptJump == 30) {
+			cptFly++;
+			mIsJumping = false;
+		}
+		if (!mIsJumping)
+			cptJump = 0;
+		if (!mIsJumping && cptFall != 30)
+			cptFall++;
+		if (mIsJumping) {
+			cptJump++;
+			cptFall--;
+		}
+		if (cptFly == 40)
+			cptFly = 0;
+	}
+	std::cout << cptFly << std::endl;
+}
+
 void Player::TryToEatCoin()
 {
 	for (std::shared_ptr<Entity> entity : LevelFactory::GetLevel()->mCoins)
@@ -62,13 +88,17 @@ bool Player::HasCollidedEnemy()
 
 void Player::GoLeft(sf::Time elapsedTime)
 {
-	UpdateTexture(mleftTexturePath);
+	if (cptFall == 30) {
+		UpdateTexture(mleftTexturePath);
+	}
 	Entity::GoLeft(elapsedTime);
 }
 
 void Player::GoRight(sf::Time elapsedTime)
 {
-	UpdateTexture(mRightTexturePath);
+	if (cptFall == 30) {
+		UpdateTexture(mRightTexturePath);
+	}
 	Entity::GoRight(elapsedTime);
 }
 
@@ -87,7 +117,7 @@ bool Player::GoDown(sf::Time elapsedTime)
 			UpdateTexture(mUpTexturePath);
 
 		sf::Vector2f movement(0.f, 0.f);
-		movement.y += 50.f;
+		movement.y += 100.f;
 		this->mSprite.move(movement * elapsedTime.asSeconds());
 		return true;
 	}

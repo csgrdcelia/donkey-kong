@@ -21,6 +21,13 @@ public:
 	void Jump(sf::Time elapsedTime);
 	void Dies(); 
 	void Wins();
+	void GravityHandle();
+
+public:
+	bool mIsJumping = false;
+	int cptJump = 0;
+	int cptFall = 30;
+	int cptFly = 0;
 
 private: 
 	sf::SoundBuffer mDiesBuffer; 
