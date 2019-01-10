@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Player.h"
 #include "LevelFactory.h"
+#include "StringHelpers.h"
 
 
 Player::Player(float x, float y) : Entity(x, y)
@@ -52,13 +53,13 @@ bool Player::HasEatenAllCoins()
 }
 
 bool Player::HasCollidedEnemy()
-{
+{ 
 	for (std::shared_ptr<Entity> entity : LevelFactory::GetLevel()->mEnemies)
-	{
+	{ 
 		sf::FloatRect fr = entity->m_sprite.getGlobalBounds();
 		if (this->m_sprite.getGlobalBounds().intersects(fr))
 		{
-			return true;
+			return true; 
 		}
 	}
 	return false;
@@ -86,24 +87,26 @@ bool Player::GoUp(sf::Time elapsedTime)
 }
 
 void Player::Dies()
-{	
+{
+	if (isAlive == false) return; 
 	if (mDiesBuffer.loadFromFile(m_deathSoundPath))
 	{
 		mDeathSound.setBuffer(mDiesBuffer);
+		mDeathSound.setPlayingOffset(sf::seconds(1.f));
 		mDeathSound.play();
-		mDeathSound.setPlayingOffset(sf::seconds(2.f));
 	}
+	isAlive = false; 
 }
+
 
 void Player::Wins()
 {
 	if (mWinsBuffer.loadFromFile(m_win1SoundPath))
 	{
 		mWin1Sound.setBuffer(mWinsBuffer);
-		mWin1Sound.play();
-		mWin1Sound.setPlayingOffset(sf::seconds(2.f));
+		mWin1Sound.setPlayingOffset(sf::seconds(1.f));
+		mWin1Sound.play();	
 	}
 }
-
 
 

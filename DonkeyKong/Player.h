@@ -27,6 +27,8 @@ private:
 	sf::Sound mDeathSound; 
 	sf::Sound mWin1Sound;
 
+	bool isAlive;
+
 protected:
 	std::string m_imagePath = "Media/Textures/mario_right.png";
 	std::string m_rightTexturePath = "Media/Textures/mario_right.png";
