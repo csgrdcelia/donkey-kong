@@ -3,6 +3,9 @@
 #include "LevelFactory.h"
 
 
+const int JUMPING_FRAMES = 10;
+const int FLYING_FRAMES = 15;
+
 Player::Player(float x, float y) : Entity(x, y)
 {
 	m_speed = 150.f;
@@ -26,26 +29,26 @@ void Player::Jump(sf::Time elapsedTime) {
 }
 
 void Player::GravityHandle() {
-	if (cptFall != 30) {
+	if (cptFall != JUMPING_FRAMES) {
 		GoesToTheRight ? UpdateTexture(mRightJumpTexturePath) : UpdateTexture(mLeftJumpTexturePath);
 	}
-	if (cptFly > 0 && cptFly < 40) {
+	if (cptFly > 0 && cptFly < FLYING_FRAMES) {
 		cptFly++;
 	}
 	else {
-		if (cptJump == 30) {
+		if (cptJump == JUMPING_FRAMES) {
 			cptFly++;
 			mIsJumping = false;
 		}
 		if (!mIsJumping)
 			cptJump = 0;
-		if (!mIsJumping && cptFall != 30)
+		if (!mIsJumping && cptFall != JUMPING_FRAMES)
 			cptFall++;
 		if (mIsJumping) {
 			cptJump++;
 			cptFall--;
 		}
-		if (cptFly == 40)
+		if (cptFly == FLYING_FRAMES)
 			cptFly = 0;
 	}
 }
@@ -87,7 +90,7 @@ bool Player::HasCollidedEnemy()
 
 void Player::GoLeft(sf::Time elapsedTime)
 {
-	if (cptFall == 30) {
+	if (cptFall == JUMPING_FRAMES) {
 		UpdateTexture(mleftTexturePath);
 	}
 	Entity::GoLeft(elapsedTime);
@@ -95,7 +98,7 @@ void Player::GoLeft(sf::Time elapsedTime)
 
 void Player::GoRight(sf::Time elapsedTime)
 {
-	if (cptFall == 30) {
+	if (cptFall == JUMPING_FRAMES) {
 		UpdateTexture(mRightTexturePath);
 	}
 	Entity::GoRight(elapsedTime);
@@ -116,7 +119,7 @@ bool Player::GoDown(sf::Time elapsedTime)
 			UpdateTexture(mUpTexturePath);
 
 		sf::Vector2f movement(0.f, 0.f);
-		movement.y += 100.f;
+		movement.y += m_speed;
 		this->mSprite.move(movement * elapsedTime.asSeconds());
 		return true;
 	}

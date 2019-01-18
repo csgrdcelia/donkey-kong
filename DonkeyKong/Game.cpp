@@ -19,7 +19,7 @@ Game::Game()
 	, mIsMovingRight(false)
 	, mIsMovingLeft(false)
 {
-	mWindow.setFramerateLimit(160);
+	mWindow.setFramerateLimit(60);
 
 	// Draw Statistic Font
 	mFont.loadFromFile("Media/Sansation.ttf");
@@ -91,9 +91,9 @@ void Game::handlePlayerInput(sf::Keyboard::Key key, bool isPressed)
 		mIsMovingLeft = isPressed;
 	else if (key == sf::Keyboard::Right)
 		mIsMovingRight = isPressed;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && mLevelFactory.GetLevel()->mPlayer->cptFall == 10) {
 		mWindow.setKeyRepeatEnabled(false);
-		if(mLevelFactory.GetLevel()->mPlayer->cptFall == 30)
+		if(mLevelFactory.GetLevel()->mPlayer->cptFall == 10)
 			mLevelFactory.GetLevel()->mPlayer->mIsJumping = true;
 	}
 	else if (key == sf::Keyboard::Return)
@@ -197,7 +197,7 @@ void Game::watchMario()
 		mario->Dies();
 		this->IsOver(0);
 	}
-	if ((mario->OnVoid() && !mario->mIsJumping && mario->cptFly == 0) || (mario->IsOnLadder() && !mario->mIsJumping && mario->cptFall != 30))
+	if ((mario->OnVoid() && !mario->mIsJumping && mario->cptFly == 0) || (mario->IsOnLadder() && !mario->mIsJumping && mario->cptFall != 10))
 		mario->GoDown(sf::microseconds(10000));
 	if (mario->IsOutsideOfWindow())
 		IsOver(0);

@@ -26,7 +26,7 @@ public:
 public:
 	bool mIsJumping = false;
 	int cptJump = 0;
-	int cptFall = 30;
+	int cptFall = 10;
 	int cptFly = 0;
 
 private: 
