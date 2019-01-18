@@ -96,7 +96,7 @@ void Game::handlePlayerInput(sf::Keyboard::Key key, bool isPressed)
 		if(mLevelFactory.GetLevel()->mPlayer->cptFall == 30)
 			mLevelFactory.GetLevel()->mPlayer->mIsJumping = true;
 	}
-	else if (key == sf::Keyboard::Enter)
+	else if (key == sf::Keyboard::Return)
 		mEnterIsPressed = isPressed;
 }
 

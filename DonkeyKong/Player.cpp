@@ -48,7 +48,6 @@ void Player::GravityHandle() {
 		if (cptFly == 40)
 			cptFly = 0;
 	}
-	std::cout << cptFly << std::endl;
 }
 
 void Player::TryToEatCoin()
