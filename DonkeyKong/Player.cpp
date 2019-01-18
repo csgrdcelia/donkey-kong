@@ -80,6 +80,7 @@ bool Player::HasCollidedEnemy()
 	for (std::shared_ptr<Entity> entity : LevelFactory::GetLevel()->mEnemies)
 	{
 		sf::FloatRect fr = entity->mSprite.getGlobalBounds();
+		fr.top += 10; // so we can better jump over them
 		if (this->mSprite.getGlobalBounds().intersects(fr))
 		{
 			return true;
