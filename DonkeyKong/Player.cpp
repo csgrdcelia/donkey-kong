@@ -55,11 +55,13 @@ void Player::GravityHandle() {
 
 void Player::TryToEatCoin()
 {
-	for (std::shared_ptr<Entity> entity : LevelFactory::GetLevel()->mCoins)
+	for (std::shared_ptr<Coin> entity : LevelFactory::GetLevel()->mCoins)
 	{
 		sf::FloatRect fr = entity->mSprite.getGlobalBounds();
 		if (this->mSprite.getGlobalBounds().intersects(fr))
 		{
+			if(entity->mEnabled == true)
+				entity->CoinSound();
 			entity->mEnabled = false;
 			break;
 		}
@@ -127,7 +129,7 @@ bool Player::GoDown(sf::Time elapsedTime)
 	return false;
 }
 
-void Player::Dies()
+void Player::DieSound()
 {	
 	if (mDiesBuffer.loadFromFile(mDeathSoundPath))
 	{
@@ -137,7 +139,7 @@ void Player::Dies()
 	}
 }
 
-void Player::Wins()
+void Player::WinSound()
 {
 	if (mWinsBuffer.loadFromFile(mWin1SoundPath))
 	{

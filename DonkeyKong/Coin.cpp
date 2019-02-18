@@ -32,3 +32,13 @@ bool Coin::CollidesLadder(std::vector<std::shared_ptr<Ladder>> mLadders)
 	}
 	return false;
 }
+
+void Coin::CoinSound()
+{
+	if (mCoinBuffer.loadFromFile(mCoinSoundPath))
+	{
+		mCoinSound.setBuffer(mCoinBuffer);
+		mCoinSound.play();
+		mCoinSound.setPlayingOffset(sf::seconds(2.f));
+	}
+}

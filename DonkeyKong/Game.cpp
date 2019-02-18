@@ -26,7 +26,7 @@ Game::Game()
 	mStatisticsText.setString("Welcome to Donkey Kong 1981");
 	mStatisticsText.setFont(mFont);
 	mStatisticsText.setPosition(5.f, 5.f);
-	mStatisticsText.setCharacterSize(10);
+	mStatisticsText.setCharacterSize(20);
 
 	// Draw end game text
 	mEndGameText.setFont(mFont);
@@ -35,6 +35,7 @@ Game::Game()
 	mEndGameText.setStyle(sf::Text::Bold);
 	mEndGameText.setFillColor(sf::Color::Red);
 
+	IntroSound();
 }
 
 void Game::run()
@@ -137,9 +138,14 @@ void Game::update(sf::Time elapsedTime)
 		if (mEnterIsPressed)
 		{
 			if (mLevelFactory.GetLevel()->IsWon)
+			{
 				mLevelFactory.LevelUp();
+				IntroSound();
+			}
 			else
+			{
 				mLevelFactory.Retry();
+			}
 
 			mEndGameText.setString("");
 			mGameState = GameState::Running;
@@ -192,11 +198,11 @@ void Game::watchMario()
 	
 	if (mario->HasEatenAllCoins())
 	{
-		mario->Wins();
+		mario->WinSound();
 		this->IsOver(1);
 	}
 	if (mario->HasCollidedEnemy()){
-		mario->Dies();
+		mario->DieSound();
 		this->IsOver(0);
 	}
 	if ((mario->OnVoid() && !mario->mIsJumping && mario->cptFly == 0) || (mario->IsOnLadder() && !mario->mIsJumping && mario->cptFall != 10))
@@ -241,5 +247,15 @@ void Game::IsOver(int state)
 	{
 		mLevelFactory.GetLevel()->IsWon = true;
 		mEndGameText.setString("YOU WON !\nEnter for next level");
+	}
+}
+
+void Game::IntroSound()
+{
+	if (mIntroBuffer.loadFromFile(mIntroSoundPath))
+	{
+		mIntroSound.setBuffer(mIntroBuffer);
+		mIntroSound.play();
+		mIntroSound.setPlayingOffset(sf::seconds(2.f));
 	}
 }

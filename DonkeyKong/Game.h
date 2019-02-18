@@ -29,6 +29,8 @@ private:
 	void handlePlayerInput(sf::Keyboard::Key key, bool isPressed);
 	void IsOver(int state);
 
+	void IntroSound();
+
 private:
 	static const sf::Time	TimePerFrame;
 	GameState		mGameState = GameState::Running;
@@ -49,4 +51,8 @@ private:
 	bool mIsMovingRight;
 	bool mIsMovingLeft;
 	bool mEnterIsPressed;
+
+	sf::SoundBuffer mIntroBuffer;
+	sf::Sound mIntroSound;
+	std::string mIntroSoundPath = "Media/Sounds/intro.wav";
 };

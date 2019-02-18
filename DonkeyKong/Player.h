@@ -19,8 +19,8 @@ public:
 	void GoRight(sf::Time elapsedTime) override; 
 	bool GoUp(sf::Time elapsedTime) override;
 	void Jump(sf::Time elapsedTime);
-	void Dies(); 
-	void Wins();
+	void DieSound(); 
+	void WinSound();
 	void GravityHandle();
 
 public:
