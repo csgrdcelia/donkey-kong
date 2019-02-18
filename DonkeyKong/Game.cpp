@@ -55,7 +55,9 @@ void Game::run()
 
 		updateStatistics(elapsedTime);
 		render();
-		watchMario();
+
+		if (mGameState != GameState::End) 
+			watchMario();
 	}
 }
 
